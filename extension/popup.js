@@ -123,14 +123,14 @@ function deleteRemoteCard(teamKey, card) {
         let availableTeamKey = hashTeam(availableTeam.querySelector("#teamJSON").innerText).toString();
         if (availableTeamKey === teamKey) {
             // Enable button and change its color
-            enableButton(availableTeam.querySelector("#actionButton"), "btn-secondary", "btn-primary", "Backup");
+            enableButton(availableTeam.querySelector("#actionButton"), "btn-secondary", "btn-primary", "Backup", backupOnClick);
             break;
         }
     }
 
     card.parentNode.removeChild(card);
     availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams), availableTeams)
-    startButtonListeners();
+    // startButtonListeners();
     updateProgressBar();
 }
 
@@ -276,54 +276,84 @@ function disableButton(button, old_color, new_color, new_text) {
     button.innerText = new_text;
 }
 
-function enableButton(button, old_color, new_color, new_text) {
+function backupOnClick() {
+    console.log("clicked backup")
+    // Check to make sure that the button isn't disabled
+    if (this.classList.contains("disabled")) {
+        return;
+    }
+    disableButtonsWhileWaiting();
+    // Send button's card to function
+    backup(this.parentElement.parentElement.parentElement);
+    enableButtonsAfterWaiting();
+}
+
+function deleteOnClick() {
+    console.log("clicked delete")
+    // Check to make sure that the button isn't disabled
+    if (this.classList.contains("disabled")) {
+        return;
+    }
+    disableButtonsWhileWaiting();
+    deleteFromSync(this.parentElement.parentElement.parentElement);
+    enableButtonsAfterWaiting();
+}
+
+function restoreOnClick() {
+    console.log("clicked restore");
+    // Check to make sure that the button isn't disabled
+    if (this.classList.contains("disabled")) {
+        return;
+    }
+    disableButtonsWhileWaiting();
+    // Send the button's card to the function
+    restoreToShowdown(this.parentElement.parentElement.parentElement);
+    enableButtonsAfterWaiting();
+}
+
+function enableButton(button, old_color, new_color, new_text, onClick) {
     button.classList.remove("disabled");
     button.classList.remove(old_color);
     button.classList.add(new_color);
     button.innerText = new_text;
+    // Store team in chrome sync when backup button clicked
+    button.addEventListener("click", onClick, false);
+}
+
+function disableButtonsWhileWaiting() {
+    let allButtonElements = document.querySelectorAll("button:not(.disabled)");
+    for (button of allButtonElements) {
+        button.classList.add("disabled");
+        button.classList.add("needToRestore");
+    }
+}
+
+function enableButtonsAfterWaiting() {
+    let allButtonElements = document.querySelectorAll("button.disabled");
+    for (button of allButtonElements) {
+        button.classList.remove("disabled");
+        button.classList.remove("needToRestore");
+    }
 }
 
 function startButtonListeners() {
-    // Now that this is all done, we can assign the buttons their onclicks
+    // assign the buttons their onclicks
     // Restore team to showdown from chrome sync when restore button clicked
     let restoreButtonQuery = document.querySelectorAll('button.btn-warning');
     for (let i = 0; i < restoreButtonQuery.length; i++) {
-        restoreButtonQuery[i].addEventListener("click", function () {
-            console.log("clicked restore")
-            // Check to make sure that the button isn't disabled
-            if (this.classList.contains("disabled")) {
-                return;
-            }
-            // Send the button's card to the function
-            restoreToShowdown(this.parentElement.parentElement.parentElement);
-        }, false);
+        restoreButtonQuery[i].addEventListener("click", restoreOnClick, false);
     }
 
     // Delete team from backup when restore button clicked
     let deleteButtonQuery = document.querySelectorAll('button.btn-danger');
     for (let i = 0; i < deleteButtonQuery.length; i++) {
-        deleteButtonQuery[i].addEventListener("click", function () {
-            console.log("clicked delete")
-            // Check to make sure that the button isn't disabled
-            if (this.classList.contains("disabled")) {
-                return;
-            }
-            deleteFromSync(this.parentElement.parentElement.parentElement);
-        }, false);
+        deleteButtonQuery[i].addEventListener("click", deleteOnClick, false);
     }
 
     // Store team in chrome sync when backup button clicked
     let backupButtonQuery = document.querySelectorAll('button.btn-primary');
     for (let i = 0; i < backupButtonQuery.length; i++) {
-        backupButtonQuery[i].addEventListener("click", function () {
-            console.log("clicked backup")
-            // Check to make sure that the button isn't disabled
-            if (this.classList.contains("disabled")) {
-                return;
-            }
-            // Send button's card to function
-            backup(this.parentElement.parentElement.parentElement);
-        }, false);
+        backupButtonQuery[i].addEventListener("click", backupOnClick, false);
     }
 }
 
