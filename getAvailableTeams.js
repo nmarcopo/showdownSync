@@ -2,6 +2,7 @@
 FIXME: this is a quick and dirty solution. Duplicate code is not good!
 I can't figure out how to share this function with the chrome tab via injection,
 So this will need to live in getAvailableTeams.js and restoreTeams.js
+From https://stackoverflow.com/a/60873268/10665534
 */
 function returnValues(query) {
     var objNativeGetter = {

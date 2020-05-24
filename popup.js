@@ -4,6 +4,7 @@ function getBootstrapElement(element_name, class_name) {
     return element;
 }
 
+// Sanitize function from here: https://stackoverflow.com/a/48226843/10665534
 function sanitize(string) {
     const map = {
         '&': '&amp;',
@@ -54,10 +55,8 @@ function hashTeam(teamString) {
 }
 
 function backup(card) {
-    let teamName = card.children[0].children[0].innerText;
     let teamJSON = card.children[2].innerText;
     let teamKey = hashTeam(teamJSON);
-    console.warn(teamKey);
     chrome.storage.sync.set({
         [teamKey]: teamJSON
     }, function () {
@@ -84,7 +83,6 @@ function restoreToShowdown(card) {
         // One liner to create a div with the info we want. Clean this up in
         // restoreTeams.js
         code: code
-        // code: "console.warn(\"it works\")"
     }, function () {
         chrome.tabs.executeScript(null, {
             file: "restoreTeams.js"
@@ -122,7 +120,6 @@ function restoreList() {
 function displayTeams(teamsString, teamslist, restore) {
     let teams = ""
     let teamList = document.getElementById(teamslist);
-    console.warn(teamsString)
     // Give user "no teams available" message if no team was passed in
     if(teamsString === "[]"){
         let card = getBootstrapElement("div", "card");
@@ -175,7 +172,6 @@ function displayTeams(teamsString, teamslist, restore) {
         }
 
         let card_details = getBootstrapElement("p", "d-none");
-        // card_details.innerText = team.format + "]" + team.folder + (team.folder !== "" ? "/" : "") + team.name + team.team
         card_details.innerText = JSON.stringify(team)
 
         card_body.appendChild(card_title);
