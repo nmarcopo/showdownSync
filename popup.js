@@ -39,13 +39,29 @@ function search() {
     }
 }
 
+// Avoids with duplicated names in teams
+// Hash from https://jsperf.com/hashcodelordvlad
+function hashTeam(teamString) {
+    let hash = 0,
+        i, char;
+    if (teamString.length == 0) return hash;
+    for (i = 0, l = teamString.length; i < l; i++) {
+        char = teamString.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 function backup(card) {
     let teamName = card.children[0].children[0].innerText;
     let teamJSON = card.children[2].innerText;
+    let teamKey = hashTeam(teamJSON);
+    console.warn(teamKey);
     chrome.storage.sync.set({
-        [teamName]: teamJSON
+        [teamKey]: teamJSON
     }, function () {
-        console.log("Saved key " + teamName + " with value " + teamJSON)
+        console.log("Saved key " + teamKey + " with value " + teamJSON)
     });
 
     card.children[1].classList.add("disabled")
@@ -55,6 +71,7 @@ function backup(card) {
 
     // Make sure the restored list gets updated correctly
     restoreList();
+    updateProgressBar();
 }
 
 function restoreToShowdown(card) {
@@ -79,9 +96,10 @@ function restoreList() {
     chrome.storage.sync.get(null, function (syncedTeams) {
         // Check if there's nothing in storage
         if (Object.keys(syncedTeams).length === 0 && syncedTeams.constructor === Object) {
+            // still use displayTeams function so it can be filled with "no teams available"
+            displayTeams("[]", "syncedTeams", true)
             return;
         }
-        console.log(syncedTeams);
 
         // Parse storage if there is stuff
         let teamString = "[";
@@ -102,8 +120,25 @@ function restoreList() {
 }
 
 function displayTeams(teamsString, teamslist, restore) {
-    console.log(teamsString)
     let teams = ""
+    let teamList = document.getElementById(teamslist);
+    console.warn(teamsString)
+    // Give user "no teams available" message if no team was passed in
+    if(teamsString === "[]"){
+        let card = getBootstrapElement("div", "card");
+        card.classList.add("mb-1");
+
+        let card_body = getBootstrapElement("div", "card-body");
+        card_body.classList.add("p-1");
+        let card_title = getBootstrapElement("small", "card-title");
+        card_title.innerHTML = "<strong>No teams available.</strong>";
+
+        card_body.appendChild(card_title);
+        card.appendChild(card_body);
+        teamList.appendChild(card);
+        return;
+    }
+
     try {
         teams = JSON.parse(teamsString);
     } catch (error) {
@@ -112,7 +147,6 @@ function displayTeams(teamsString, teamslist, restore) {
         alert("Your teams are corrupted. Check the logs for details. Try clearing your saved teams in the options menu to fix this.")
         throw new Error("Teams cannot be parsed")
     }
-    let teamList = document.getElementById(teamslist);
     for (team of teams) {
         let card = getBootstrapElement("div", "card");
         card.classList.add("mb-1");
@@ -156,14 +190,14 @@ function displayTeams(teamsString, teamslist, restore) {
 function moveDisabledToBottom(list) {
     let listArray = [];
     for (let team of list.children) {
-        if(team.children[1].classList.contains("disabled")){
+        if (team.children[1].classList.contains("disabled")) {
             listArray.push(team);
-        }else{
+        } else {
             listArray.unshift(team);
         }
     }
     let newList = list.cloneNode(false);
-    for(team of listArray){
+    for (team of listArray) {
         newList.appendChild(team)
     }
     return newList
@@ -184,7 +218,6 @@ function disableDuplicates() {
                 availableTeam.children[1].classList.remove("btn-primary");
                 availableTeam.children[1].classList.add("btn-secondary");
                 availableTeam.children[1].innerText = "Backed Up";
-                
 
                 restoreTeam.children[1].classList.add("disabled");
                 restoreTeam.children[1].classList.remove("btn-warning");
@@ -211,7 +244,6 @@ function disableDuplicates() {
 // Runs when extension is loaded
 // Check for Showdown teams
 chrome.tabs.executeScript(null, {
-    // ReturnValues is a function from retrieveValue.js
     file: "getAvailableTeams.js"
 }, function (ret) {
     document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
@@ -228,3 +260,14 @@ chrome.tabs.executeScript(null, {
         }, false);
     }
 });
+
+function updateProgressBar() {
+    let progressBarDiv = document.getElementById("storageProgress");
+    let byteLimit = 100000;
+    chrome.storage.sync.getBytesInUse(null, function (bytesInUse) {
+        let bytePercentage = Math.round((byteLimit - bytesInUse) / byteLimit * 100);
+        progressBarDiv.setAttribute("style", "width: " + bytePercentage + "%");
+        progressBarDiv.innerText = bytePercentage + "%";
+    });
+}
+updateProgressBar();

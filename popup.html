@@ -12,19 +12,26 @@
         <header class="d-flex justify-content-center">
             <h2 class="mt-2">Showdown Team Sync</h1>
         </header>
+        <div class="mb-2">
+            <small>Sync Storage Remaining:</small>
+            <div class="progress">
+                <div class="progress-bar bg-info" role="progressbar" id="storageProgress">0%</div>
+            </div>
+        </div>
         <div class="d-flex justify-content-center mb-2">
-            <input id="searchLocalTeams" class="form-control mr-sm-2 w-50" type="text" placeholder="Search Team Names">
+            <input id="searchLocalTeams" class="form-control form-control-sm mr-sm-2 w-50" type="text" placeholder="Search Team Names">
         </div>
         <nav class="d-flex justify-content-center">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-available-tab" data-toggle="tab" href="#nav-available" role="tab"
-                    aria-controls="nav-available" aria-selected="true">Available Teams</a>
+                <a class="nav-item nav-link active" id="nav-available-tab" data-toggle="tab" href="#nav-available"
+                    role="tab" aria-controls="nav-available" aria-selected="true">Available Teams</a>
                 <a class="nav-item nav-link" id="nav-restore-tab" data-toggle="tab" href="#nav-restore" role="tab"
                     aria-controls="nav-restore" aria-selected="false">Restore Teams</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-available" role="tabpanel" aria-labelledby="nav-available-tab">
+            <div class="tab-pane fade show active" id="nav-available" role="tabpanel"
+                aria-labelledby="nav-available-tab">
                 <ul id="localTeams" class="mb-2 list-group"></ul>
             </div>
             <div class="tab-pane fade" id="nav-restore" role="tabpanel" aria-labelledby="nav-restore-tab">
@@ -34,7 +41,6 @@
     </div>
 </body>
 
-<script src="retrieveValue.js"></script>
 <script src="popup.js"></script>
 <script src="jquery.js"></script>
 <script src="bootstrap.min.js"></script>
