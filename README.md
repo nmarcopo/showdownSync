@@ -1,4 +1,4 @@
-# Pokemon Showdown Team Sync
+# Pokemon Showdown Team Sync ![logo](logo_32.png) 
 
 This is a chrome extension that can sync teams between browsers on [Pokemon Showdown](https://play.pokemonshowdown.com) using Chrome sync data.
 
@@ -28,7 +28,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 
 - [x] Add delete button to backed up teams
 - [x] Make options page look nicer
-- [ ] Add logo
+- [x] Add logo
 - [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
@@ -44,5 +44,7 @@ Big thanks to the following resources:
 - [Javascript Injection Function](https://stackoverflow.com/a/60873268/10665534)
 - [Pokemon Showdown Client GitHub](https://github.com/smogon/pokemon-showdown-client)
 - [Bootstrap](https://getbootstrap.com/)
+- [Font Awesome](https://fontawesome.com/)
+  - [License here](https://fontawesome.com/license), changes were made to the "Sync" glyph - added a Pokeball
 
 And the hundreds of other StackOverflow pages and random JavaScript references I used but can't recall.
