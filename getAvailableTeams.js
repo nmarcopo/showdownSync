@@ -1,4 +1,9 @@
-function returnValues() {
+/*
+FIXME: this is a quick and dirty solution. Duplicate code is not good!
+I can't figure out how to share this function with the chrome tab via injection,
+So this will need to live in getAvailableTeams.js and restoreTeams.js
+*/
+function returnValues(query) {
     var objNativeGetter = {
 
         divsToTidyup: [],
@@ -48,6 +53,7 @@ function returnValues() {
     };
 
     // do some validation, then carefully call objNativeGetter.find(...) with a known string (don't use any user generated or dynamic string - keep tight control over this)
-    return JSON.stringify(objNativeGetter.find('window.Storage.teams'));
+    return JSON.stringify(objNativeGetter.find(query));
 };
-returnValues();
+
+returnValues("window.Storage.teams");

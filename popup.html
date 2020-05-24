@@ -1,25 +1,42 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" style="min-width:30em;">
+<html xmlns="http://www.w3.org/1999/xhtml" style="min-width:25em;">
 
 <head>
-    <!-- <link href="popup.css" rel="stylesheet" type="text/css" media="all"> -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://play.pokemonshowdown.com/style/battle.css">
 </head>
 
 <body>
     <div class="container flex-container">
-        <header>
-            <h1 class="mt-2">Showdown Team Backup</h1>
+        <header class="d-flex justify-content-center">
+            <h2 class="mt-2">Showdown Team Sync</h1>
         </header>
-        <ul id="teamsGoHere" class="mb-2 list-group"></ul>
+        <div class="d-flex justify-content-center mb-2">
+            <input id="searchLocalTeams" class="form-control mr-sm-2 w-50" type="text" placeholder="Search Team Names">
+        </div>
+        <nav class="d-flex justify-content-center">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-available-tab" data-toggle="tab" href="#nav-available" role="tab"
+                    aria-controls="nav-available" aria-selected="true">Available Teams</a>
+                <a class="nav-item nav-link" id="nav-restore-tab" data-toggle="tab" href="#nav-restore" role="tab"
+                    aria-controls="nav-restore" aria-selected="false">Restore Teams</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-available" role="tabpanel" aria-labelledby="nav-available-tab">
+                <ul id="localTeams" class="mb-2 list-group"></ul>
+            </div>
+            <div class="tab-pane fade" id="nav-restore" role="tabpanel" aria-labelledby="nav-restore-tab">
+                <ul id="syncedTeams" class="mb-2 list-group"></ul>
+            </div>
+        </div>
     </div>
 </body>
 
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script> -->
-
+<script src="retrieveValue.js"></script>
 <script src="popup.js"></script>
+<script src="jquery.js"></script>
+<script src="bootstrap.min.js"></script>
 
 </html>
