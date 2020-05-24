@@ -26,10 +26,13 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 
 ## TODO:
 
-- [ ] Add delete button to backed up teams
+- [x] Add delete button to backed up teams
 - [ ] Make options page look nicer
+- [ ] Add logo
+- [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
+- [ ] Clicking "Backup" rearranges the order of the available cards
 
 ## Credits
 
