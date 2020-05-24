@@ -21,7 +21,7 @@ function sanitize(string) {
 function showTeams(searchTerm) {
     var videos = document.getElementsByClassName("card");
     Array.from(videos).forEach(element => {
-        if (!element.children[0].children[0].innerText.includes(searchTerm)) {
+        if (!element.children[0].children[0].innerText.toLowerCase().includes(searchTerm.toLowerCase())) {
             // if the search result is not in one of the strings of videos, hide it
             element.classList.add("d-none");
         } else {
@@ -349,7 +349,7 @@ function disableDuplicates() {
     restoreTeams.parentNode.replaceChild(moveDisabledToBottom(restoreTeams), restoreTeams)
 
     startButtonListeners();
-
+    search();
 }
 
 // Runs when extension is loaded
@@ -360,8 +360,6 @@ chrome.tabs.executeScript(null, {
     document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
     displayTeams(ret[0], "localTeams");
     restoreList();
-
-    search();
 });
 
 function updateProgressBar() {

@@ -27,7 +27,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 ## TODO:
 
 - [x] Add delete button to backed up teams
-- [ ] Make options page look nicer
+- [x] Make options page look nicer
 - [ ] Add logo
 - [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
@@ -45,4 +45,4 @@ Big thanks to the following resources:
 - [Pokemon Showdown Client GitHub](https://github.com/smogon/pokemon-showdown-client)
 - [Bootstrap](https://getbootstrap.com/)
 
-And the hundreds of other StackOverflow articles and random JavaScript references I used but can't recall.
+And the hundreds of other StackOverflow pages and random JavaScript references I used but can't recall.
