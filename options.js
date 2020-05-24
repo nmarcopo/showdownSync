@@ -15,11 +15,15 @@ function getNumBackups(){
             return;
         }
         clearBackupsText.innerText = "You have " + numTeams + " teams backed up.";
-        clearBackupsText.classList.remove("disabled");
+        clearAllBackupsButton.classList.remove("disabled");
     });
 }
 
 getNumBackups();
 clearAllBackupsButton.addEventListener("click", function(){
+    // Check to make sure that the button isn't disabled
+    if(this.classList.contains("disabled")){
+        return;
+    }
     clearAllBackups();
 }, false);

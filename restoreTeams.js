@@ -73,7 +73,7 @@ function saveTeams() {
     } catch {
         console.error("Could not parse JSON. Here's the team string:");
         console.error(teamData)
-        alert("Your team is corrupted. Check the logs for details. Try restoring a different team, or clear out your saved teams.")
+        alert("Your team is corrupted. Check the logs on play.pokemonshowdown.com for details. Try restoring a different team, or clear out your saved teams.")
         throw Error("Could not parse JSON.")
     }
     // Get existing teams

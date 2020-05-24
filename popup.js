@@ -63,11 +63,6 @@ function backup(card) {
         console.log("Saved key " + teamKey + " with value " + teamJSON)
     });
 
-    card.children[1].classList.add("disabled")
-    card.children[1].classList.remove("btn-primary");
-    card.children[1].classList.add("btn-secondary");
-    card.children[1].innerText = "Backed Up";
-
     // Make sure the restored list gets updated correctly
     restoreList();
     updateProgressBar();
@@ -88,6 +83,8 @@ function restoreToShowdown(card) {
             file: "restoreTeams.js"
         });
     });
+    disableButton(card.children[1], "btn-warning", "btn-secondary", "Already Loaded");
+    disableDuplicates(); // Use this function to send the disabled one to the bottom
 }
 
 function restoreList() {
@@ -141,7 +138,7 @@ function displayTeams(teamsString, teamslist, restore) {
     } catch (error) {
         console.error("Teams are corrupted and we can't parse the JSON. Here are the teams:")
         console.error(teamsString)
-        alert("Your teams are corrupted. Check the logs for details. Try clearing your saved teams in the options menu to fix this.")
+        alert("Your teams are corrupted. Check the logs on this extension for details. Try clearing your saved teams in the options menu to fix this.")
         throw new Error("Teams cannot be parsed")
     }
     for (team of teams) {
@@ -172,7 +169,14 @@ function displayTeams(teamsString, teamslist, restore) {
         }
 
         let card_details = getBootstrapElement("p", "d-none");
-        card_details.innerText = JSON.stringify(team)
+        console.warn(team);
+        // Need to make sure that iconCache is the last element in the array
+        // so that the restore regex works.
+        let teamKeys = Object.keys(team);
+        teamKeys.splice(Object.keys(teamKeys).indexOf("iconCache"), 1);
+        teamKeys.push("iconCache");
+        card_details.innerText = JSON.stringify(team, teamKeys);
+        console.warn(card_details.innerText);
 
         card_body.appendChild(card_title);
         card_body.appendChild(card_text);
@@ -199,6 +203,13 @@ function moveDisabledToBottom(list) {
     return newList
 }
 
+function disableButton(button, old_color, new_color, new_text){
+    button.classList.add("disabled");
+    button.classList.remove(old_color);
+    button.classList.add(new_color);
+    button.innerText = new_text;
+}
+
 function disableDuplicates() {
     let availableTeams = document.getElementById("localTeams");
     let restoreTeams = document.getElementById("syncedTeams");
@@ -210,15 +221,8 @@ function disableDuplicates() {
             let restoreTeamText = restoreTeam.children[2].innerText;
             if (availableTeamText === restoreTeamText) {
                 // Disable buttons and change their color
-                availableTeam.children[1].classList.add("disabled");
-                availableTeam.children[1].classList.remove("btn-primary");
-                availableTeam.children[1].classList.add("btn-secondary");
-                availableTeam.children[1].innerText = "Backed Up";
-
-                restoreTeam.children[1].classList.add("disabled");
-                restoreTeam.children[1].classList.remove("btn-warning");
-                restoreTeam.children[1].classList.add("btn-secondary");
-                restoreTeam.children[1].innerText = "Already Loaded";
+                disableButton(availableTeam.children[1], "btn-primary", "btn-secondary", "Backed Up");
+                disableButton(restoreTeam.children[1], "btn-warning", "btn-secondary", "Already Loaded")
                 break;
             }
         }
@@ -232,6 +236,10 @@ function disableDuplicates() {
     let restoreButtonQuery = document.querySelectorAll('button.btn-warning');
     for (let i = 0; i < restoreButtonQuery.length; i++) {
         restoreButtonQuery[i].addEventListener("click", function () {
+            // Check to make sure that the button isn't disabled
+            if(this.classList.contains("disabled")){
+                return;
+            }
             restoreToShowdown(this.parentElement);
         }, false);
     }
@@ -252,6 +260,10 @@ chrome.tabs.executeScript(null, {
     let backupButtonQuery = document.querySelectorAll('button.btn-primary');
     for (let i = 0; i < backupButtonQuery.length; i++) {
         backupButtonQuery[i].addEventListener("click", function () {
+            // Check to make sure that the button isn't disabled
+            if(this.classList.contains("disabled")){
+                return;
+            }
             backup(this.parentElement);
         }, false);
     }

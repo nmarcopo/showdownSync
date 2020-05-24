@@ -22,6 +22,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
   - This is enough for about 30 full teams of 6 Pokemon.
   - I might add an option to save to Google Drive if there's enough interest for higher capacity syncing.
 - Buggy/disorganized code. I just made this in a couple of days and I haven't rigorously tested it, but if you have a problem make sure you file a GitHub issue!
+- You need to be signed into Google Chrome with a Google account and have Sync enabled.
 
 ## TODO:
 
