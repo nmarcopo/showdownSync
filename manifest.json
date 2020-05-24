@@ -12,6 +12,12 @@
     "page_action": {
         "default_popup": "popup.html"
     },
+    "icons":{
+        "16": "logo_16.png",
+        "32": "logo_32.png",
+        "48": "logo_48.png",
+        "128": "logo_128.png"
+    },
     "options_page": "options.html",
     "manifest_version": 2
 }
