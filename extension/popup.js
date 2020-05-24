@@ -360,6 +360,7 @@ chrome.tabs.executeScript(null, {
     document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
     displayTeams(ret[0], "localTeams");
     restoreList();
+    startButtonListeners();
 });
 
 function updateProgressBar() {
