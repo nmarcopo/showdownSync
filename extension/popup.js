@@ -233,7 +233,7 @@ function displayTeams(teamsString, teamslist, restore) {
         card_text.classList.add("d-flex");
         card_text.classList.add("justify-content-center");
         card_text.classList.add("m-1");
-        if (team.iconCache.localeCompare("") !== 0) {
+        if ("iconCache" in team && team.iconCache.localeCompare("") !== 0) {
             card_text.innerHTML = team.iconCache;
         } else {
             // Icons haven't been loaded yet. Load manually
@@ -249,7 +249,6 @@ function displayTeams(teamsString, teamslist, restore) {
                 chrome.tabs.executeScript(null, {
                     file: "getIcons.js"
                 }, function (ret) {
-                    console.log(ret);
                     if (ret) {
                         // Remove the first and last quotes, and un-escape the rest of the quotations
                         team.iconCache = ret[0].substr(1).slice(0, -1).replace(/\\\"/g, "\"");
@@ -263,14 +262,8 @@ function displayTeams(teamsString, teamslist, restore) {
 
         let card_details = getBootstrapElement("p", "d-none");
         card_details.setAttribute("id", "teamJSON");
-        console.log(team);
-        // Need to make sure that iconCache is the last element in the array
-        // so that the restore regex works.
-        let teamKeys = Object.keys(team);
-        teamKeys.splice(Object.keys(teamKeys).indexOf("iconCache"), 1);
-        teamKeys.push("iconCache");
-        card_details.innerText = JSON.stringify(team, teamKeys);
-        console.log(card_details.innerText);
+        delete team.iconCache;
+        card_details.innerText = JSON.stringify(team)
 
         card_body.appendChild(card_title);
         card_body.appendChild(card_text);
@@ -308,6 +301,10 @@ function moveDisabledToBottom(list, query) {
         }
     }
     let newList = list.cloneNode(false);
+    if (listArray.length === 0){
+        // We have no elements in the list. Push the "No teams available" card
+        listArray.push(list.children[0]);
+    }
     for (team of listArray) {
         newList.appendChild(team)
     }
