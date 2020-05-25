@@ -81,13 +81,14 @@ function restoreToShowdown(card) {
     }, function () {
         chrome.tabs.executeScript(null, {
             file: "restoreTeams.js"
+        }, function () {
+            loadTeamsInShowdown();
+            disableDuplicates(); // Use this function to send the disabled one to the bottom        
         });
     });
-    disableButton(card.querySelector("#actionButton"), "btn-warning", "btn-secondary", "Already Loaded");
-    disableDuplicates(); // Use this function to send the disabled one to the bottom
 }
 
-function restoreList() {
+function restoreList(init = false) {
     chrome.storage.sync.get(null, function (syncedTeams) {
         // Check if there's nothing in storage
         if (Object.keys(syncedTeams).length === 0 && syncedTeams.constructor === Object) {
@@ -110,7 +111,7 @@ function restoreList() {
         displayTeams(teamString, "syncedTeams", true);
 
         // Now, disable backing up ones that are already backed up
-        disableDuplicates();
+        disableDuplicates(init)
     });
 }
 
@@ -124,24 +125,24 @@ function deleteRemoteCard(teamKey, card) {
         if (availableTeamKey === teamKey) {
             // Enable button and change its color
             enableButton(availableTeam.querySelector("#actionButton"), "btn-secondary", "btn-primary", "Backup", backupOnClick);
+            availableTeams.removeChild(availableTeam);
+            availableTeams.insertBefore(availableTeam, availableTeams.firstChild);
             break;
         }
     }
 
     card.parentNode.removeChild(card);
-    availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams), availableTeams)
+    // availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams, "needToRestore"), availableTeams)
     // startButtonListeners();
     updateProgressBar();
 }
 
 function deleteFromSync(card) {
-    chrome.storage.sync.get(null, function (items) {
-        console.log(items);
-    });
-
     let teamName = card.querySelector("#teamName").innerText;
     let confirmDelete = confirm("Are you sure you want to delete " + teamName + "?");
     if (!confirmDelete) {
+        let deleteButton = card.querySelector("#deleteTeam");
+        deleteButton.classList.remove("disabled");
         return;
     }
     let teamString = card.querySelector("#teamJSON").innerText;
@@ -158,6 +159,10 @@ function deleteFromSync(card) {
 function displayTeams(teamsString, teamslist, restore) {
     let teams = ""
     let teamList = document.getElementById(teamslist);
+    // Clear the list first
+    while (teamList.firstChild) {
+        teamList.removeChild(teamList.lastChild);
+    }
     // Give user "no teams available" message if no team was passed in
     if (teamsString === "[]") {
         let card = getBootstrapElement("div", "card");
@@ -227,10 +232,12 @@ function displayTeams(teamsString, teamslist, restore) {
         card_text.classList.add("d-flex");
         card_text.classList.add("justify-content-center");
         card_text.classList.add("m-1");
-        if ("iconCache" in team) {
+        if (team.iconCache.localeCompare("") !== 0) {
             card_text.innerHTML = team.iconCache;
         } else {
-            card_text.innerText = "Can't get Pokemon icons, try refreshing."
+            // // Icons haven't been loaded yet. Load manually
+
+            // card_text.innerText = "Can't get Pokemon icons, try refreshing."
         }
 
         let card_details = getBootstrapElement("p", "d-none");
@@ -253,13 +260,23 @@ function displayTeams(teamsString, teamslist, restore) {
     }
 }
 
-function moveDisabledToBottom(list) {
+function moveDisabledToBottom(list, query) {
     let listArray = [];
     for (let team of list.children) {
-        if (team.querySelector("#actionButton").classList.contains("disabled")) {
-            listArray.push(team);
+        if (team.querySelector("#actionButton").classList.contains(query)) {
+            // FIXME: this is a really bad way to do this but the behavior is reversed
+            // when checking for disabled and checking for needToRestore
+            if (query === "needToRestore") {
+                listArray.unshift(team);
+            } else {
+                listArray.push(team);
+            }
         } else {
-            listArray.unshift(team);
+            if (query === "needToRestore") {
+                listArray.push(team);
+            } else {
+                listArray.unshift(team);
+            }
         }
     }
     let newList = list.cloneNode(false);
@@ -282,9 +299,11 @@ function backupOnClick() {
     if (this.classList.contains("disabled")) {
         return;
     }
+    this.classList.add("disabled");
     disableButtonsWhileWaiting();
     // Send button's card to function
     backup(this.parentElement.parentElement.parentElement);
+    disableDuplicates();
     enableButtonsAfterWaiting();
 }
 
@@ -294,8 +313,10 @@ function deleteOnClick() {
     if (this.classList.contains("disabled")) {
         return;
     }
+    this.classList.add("disabled");
     disableButtonsWhileWaiting();
     deleteFromSync(this.parentElement.parentElement.parentElement);
+    disableDuplicates();
     enableButtonsAfterWaiting();
 }
 
@@ -305,9 +326,12 @@ function restoreOnClick() {
     if (this.classList.contains("disabled")) {
         return;
     }
+    this.classList.add("disabled");
+    let card = this.parentElement.parentElement.parentElement;
+    disableButton(card.querySelector("#actionButton"), "btn-warning", "btn-secondary", "Already Loaded");
     disableButtonsWhileWaiting();
     // Send the button's card to the function
-    restoreToShowdown(this.parentElement.parentElement.parentElement);
+    restoreToShowdown(card);
     enableButtonsAfterWaiting();
 }
 
@@ -329,7 +353,7 @@ function disableButtonsWhileWaiting() {
 }
 
 function enableButtonsAfterWaiting() {
-    let allButtonElements = document.querySelectorAll("button.disabled");
+    let allButtonElements = document.querySelectorAll("button.needToRestore");
     for (button of allButtonElements) {
         button.classList.remove("disabled");
         button.classList.remove("needToRestore");
@@ -357,13 +381,21 @@ function startButtonListeners() {
     }
 }
 
-function disableDuplicates() {
+function disableDuplicates(init = false) {
     let availableTeams = document.getElementById("localTeams");
     let restoreTeams = document.getElementById("syncedTeams");
+    // let availableTeamsExist = true;
 
     // Go through each combination and see if there's a match
     for (let availableTeam of availableTeams.children) {
-        let availableTeamText = availableTeam.querySelector("#teamJSON").innerText;
+        let availableTeamText = "";
+        try {
+            availableTeamText = availableTeam.querySelector("#teamJSON").innerText;
+        } catch {
+            // there's no teams available, we can break
+            availableTeamsExist = false;
+            break;
+        }
         for (let restoreTeam of restoreTeams.children) {
             let restoreTeamText = restoreTeam.querySelector("#teamJSON").innerText;
             if (availableTeamText === restoreTeamText) {
@@ -375,8 +407,14 @@ function disableDuplicates() {
         }
     }
 
-    availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams), availableTeams)
-    restoreTeams.parentNode.replaceChild(moveDisabledToBottom(restoreTeams), restoreTeams)
+    let query = "needToRestore";
+    if (init) {
+        query = "disabled";
+    }
+    // if (availableTeamsExist) {
+    availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams, query), availableTeams)
+    // }
+    restoreTeams.parentNode.replaceChild(moveDisabledToBottom(restoreTeams, query), restoreTeams)
 
     startButtonListeners();
     search();
@@ -384,14 +422,17 @@ function disableDuplicates() {
 
 // Runs when extension is loaded
 // Check for Showdown teams
-chrome.tabs.executeScript(null, {
-    file: "getAvailableTeams.js"
-}, function (ret) {
-    document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
-    displayTeams(ret[0], "localTeams");
-    restoreList();
-    startButtonListeners();
-});
+function loadTeamsInShowdown() {
+    chrome.tabs.executeScript(null, {
+        file: "getAvailableTeams.js"
+    }, function (ret) {
+        document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
+        displayTeams(ret[0], "localTeams");
+        restoreList("init");
+        startButtonListeners();
+        // disableDuplicates();
+    });
+}
 
 function updateProgressBar() {
     let progressBarDiv = document.getElementById("storageProgress");
@@ -403,4 +444,7 @@ function updateProgressBar() {
         storagePercentageDiv.innerText = bytePercentage + "%";
     });
 }
+
+// Main execution
+loadTeamsInShowdown();
 updateProgressBar();
