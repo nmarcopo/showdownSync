@@ -30,6 +30,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Make options page look nicer
 - [x] Add logo
 - [x] Load icons manually when user isn't on the team page already
+- [ ] Backups when icons were not loaded manually still store the icons
 - [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
