@@ -157,6 +157,21 @@ function deleteFromSync(card) {
     deleteRemoteCard(teamKey, card);
 }
 
+function createNoTeamsAvailableCard(){
+    let card = getBootstrapElement("div", "card");
+    card.classList.add("mb-1");
+    card.classList.add("text-center");
+
+    let card_body = getBootstrapElement("div", "card-body");
+    card_body.classList.add("p-1");
+    let card_title = getBootstrapElement("small", "card-title");
+    card_title.innerHTML = "<strong>No teams available.</strong>";
+
+    card_body.appendChild(card_title);
+    card.appendChild(card_body);
+    return card;
+}
+
 function displayTeams(teamsString, teamslist, restore) {
     let teams = ""
     let teamList = document.getElementById(teamslist);
@@ -166,18 +181,7 @@ function displayTeams(teamsString, teamslist, restore) {
     }
     // Give user "no teams available" message if no team was passed in
     if (teamsString === "[]") {
-        let card = getBootstrapElement("div", "card");
-        card.classList.add("mb-1");
-        card.classList.add("text-center");
-
-        let card_body = getBootstrapElement("div", "card-body");
-        card_body.classList.add("p-1");
-        let card_title = getBootstrapElement("small", "card-title");
-        card_title.innerHTML = "<strong>No teams available.</strong>";
-
-        card_body.appendChild(card_title);
-        card.appendChild(card_body);
-        teamList.appendChild(card);
+        teamList.appendChild(createNoTeamsAvailableCard());
         return;
     }
 
@@ -238,7 +242,7 @@ function displayTeams(teamsString, teamslist, restore) {
         } else {
             // Icons haven't been loaded yet. Load manually
             // let teamString = card.querySelector("#teamJSON").innerText;
-            let code = "{let x = document.createElement('div'); x.setAttribute('id', 'teamData'); x.innerText = '";
+            let code = "{let x = document.createElement('div'); x.setAttribute('id', 'teamData'); x.setAttribute('style', 'display: none;'); x.innerText = '";
             code = code.concat(team.team);
             code = code.concat("'; document.body.appendChild(x)}");
             chrome.tabs.executeScript(null, {
@@ -301,9 +305,10 @@ function moveDisabledToBottom(list, query) {
         }
     }
     let newList = list.cloneNode(false);
-    if (listArray.length === 0){
+    if (listArray.length === 0 || listArray[0] === undefined){
         // We have no elements in the list. Push the "No teams available" card
-        listArray.push(list.children[0]);
+        listArray = [];
+        listArray.push(createNoTeamsAvailableCard());
     }
     for (team of listArray) {
         newList.appendChild(team)
