@@ -74,7 +74,7 @@ function backup(card) {
 function restoreToShowdown(card) {
     console.log("restoring...");
     let teamString = card.querySelector("#teamJSON").innerText;
-    let code = "{let x = document.createElement('div'); x.setAttribute('id', 'teamData'); x.innerText = '";
+    let code = "{let x = document.createElement('div'); x.setAttribute('id', 'teamData'); x.setAttribute('style', 'display: none;'); x.innerText = '";
     code = code.concat(teamString);
     code = code.concat("'; document.body.appendChild(x)}");
     chrome.tabs.executeScript(null, {
@@ -279,7 +279,8 @@ function displayTeams(teamsString, teamslist, restore) {
 }
 
 function moveDisabledToBottom(list, query) {
-    let listArray = [];
+    let disabledArray = [];
+    let enabledArray = []
     for (let team of list.children) {
         let checkQuery = null;
         try{
@@ -292,18 +293,19 @@ function moveDisabledToBottom(list, query) {
             // FIXME: this is a really bad way to do this but the behavior is reversed
             // when checking for disabled and checking for needToRestore
             if (query === "needToRestore") {
-                listArray.unshift(team);
+                enabledArray.push(team);
             } else {
-                listArray.push(team);
+                disabledArray.push(team);
             }
         } else {
             if (query === "needToRestore") {
-                listArray.push(team);
+                disabledArray.push(team);
             } else {
-                listArray.unshift(team);
+                enabledArray.push(team);
             }
         }
     }
+    let listArray = enabledArray.concat(disabledArray);
     let newList = list.cloneNode(false);
     if (listArray.length === 0 || listArray[0] === undefined){
         // We have no elements in the list. Push the "No teams available" card

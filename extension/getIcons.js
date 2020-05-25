@@ -65,6 +65,7 @@ function returnValues(query, needReturn) {
 
 function getIcons() {
     let teamDiv = document.getElementById('teamData');
+    teamDiv.setAttribute('style', 'display: none;');
     let packedTeamData = teamDiv.innerText;
     console.log(packedTeamData);
     // icon data

@@ -34,10 +34,10 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
-- [ ] Clicking "Backup" rearranges the order of the available cards
+- [x] Clicking "Backup" rearranges the order of the available cards
 - [x] Small ordering bugs - sometimes the order of the cards is unpredictable
 - [ ] Optimize the code to run faster
-- [ ] Hide the injected code from view
+- [x] Hide the injected code from view
 - [ ] Fix Javascript error when running `room.update()` without teambuilder open
 
 ## Credits
