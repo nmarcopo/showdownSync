@@ -37,6 +37,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Small ordering bugs - sometimes the order of the cards is unpredictable
 - [ ] Optimize the code to run faster
 - [ ] Hide the injected code from view
+- [ ] Fix Javascript error when running `room.update()` without teambuilder open
 
 ## Credits
 
