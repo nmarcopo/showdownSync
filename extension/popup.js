@@ -40,9 +40,12 @@ function search() {
     }
 }
 
-// Avoids with duplicated names in teams
+// Avoids duplicated names in teams
 // Hash from https://jsperf.com/hashcodelordvlad
 function hashTeam(teamString) {
+    // Remove the iconcache before hashing
+    teamString = teamString.replace(/,"iconCache":"[^}]*"/g, '');
+
     let hash = 0,
         i, char;
     if (teamString.length == 0) return hash;
@@ -132,8 +135,6 @@ function deleteRemoteCard(teamKey, card) {
     }
 
     card.parentNode.removeChild(card);
-    // availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams, "needToRestore"), availableTeams)
-    // startButtonListeners();
     updateProgressBar();
 }
 
@@ -235,9 +236,29 @@ function displayTeams(teamsString, teamslist, restore) {
         if (team.iconCache.localeCompare("") !== 0) {
             card_text.innerHTML = team.iconCache;
         } else {
-            // // Icons haven't been loaded yet. Load manually
-
-            // card_text.innerText = "Can't get Pokemon icons, try refreshing."
+            // Icons haven't been loaded yet. Load manually
+            // let teamString = card.querySelector("#teamJSON").innerText;
+            let code = "{let x = document.createElement('div'); x.setAttribute('id', 'teamData'); x.innerText = '";
+            code = code.concat(team.team);
+            code = code.concat("'; document.body.appendChild(x)}");
+            chrome.tabs.executeScript(null, {
+                // One liner to create a div with the info we want. Clean this up in
+                // restoreTeams.js
+                code: code
+            }, function () {
+                chrome.tabs.executeScript(null, {
+                    file: "getIcons.js"
+                }, function (ret) {
+                    console.log(ret);
+                    if (ret) {
+                        // Remove the first and last quotes, and un-escape the rest of the quotations
+                        team.iconCache = ret[0].substr(1).slice(0, -1).replace(/\\\"/g, "\"");
+                        card_text.innerHTML = team.iconCache;
+                    } else {
+                        card_text.innerText = "Couldn't load team icons manually.";
+                    }
+                });
+            });
         }
 
         let card_details = getBootstrapElement("p", "d-none");
@@ -263,7 +284,14 @@ function displayTeams(teamsString, teamslist, restore) {
 function moveDisabledToBottom(list, query) {
     let listArray = [];
     for (let team of list.children) {
-        if (team.querySelector("#actionButton").classList.contains(query)) {
+        let checkQuery = null;
+        try{
+            checkQuery = team.querySelector("#actionButton").classList.contains(query);
+        }catch{
+            // the team action button doesn't exist. we can continue
+            continue;
+        }
+        if (checkQuery) {
             // FIXME: this is a really bad way to do this but the behavior is reversed
             // when checking for disabled and checking for needToRestore
             if (query === "needToRestore") {
@@ -384,21 +412,23 @@ function startButtonListeners() {
 function disableDuplicates(init = false) {
     let availableTeams = document.getElementById("localTeams");
     let restoreTeams = document.getElementById("syncedTeams");
-    // let availableTeamsExist = true;
 
     // Go through each combination and see if there's a match
     for (let availableTeam of availableTeams.children) {
-        let availableTeamText = "";
+        let availableTeamHash = null;
         try {
-            availableTeamText = availableTeam.querySelector("#teamJSON").innerText;
+            availableTeamHash = hashTeam(availableTeam.querySelector("#teamJSON").innerText);
         } catch {
-            // there's no teams available, we can break
-            availableTeamsExist = false;
             break;
         }
         for (let restoreTeam of restoreTeams.children) {
-            let restoreTeamText = restoreTeam.querySelector("#teamJSON").innerText;
-            if (availableTeamText === restoreTeamText) {
+            let restoreTeamHash = null;
+            try {
+                restoreTeamHash = hashTeam(restoreTeam.querySelector("#teamJSON").innerText);
+            } catch {
+                break;
+            }
+            if (availableTeamHash === restoreTeamHash) {
                 // Disable buttons and change their color
                 disableButton(availableTeam.querySelector("#actionButton"), "btn-primary", "btn-secondary", "Backed Up");
                 disableButton(restoreTeam.querySelector("#actionButton"), "btn-warning", "btn-secondary", "Already Loaded")
@@ -411,9 +441,7 @@ function disableDuplicates(init = false) {
     if (init) {
         query = "disabled";
     }
-    // if (availableTeamsExist) {
     availableTeams.parentNode.replaceChild(moveDisabledToBottom(availableTeams, query), availableTeams)
-    // }
     restoreTeams.parentNode.replaceChild(moveDisabledToBottom(restoreTeams, query), restoreTeams)
 
     startButtonListeners();
@@ -442,6 +470,7 @@ function updateProgressBar() {
         let bytePercentage = Math.round((byteLimit - bytesInUse) / byteLimit * 100);
         progressBarDiv.setAttribute("style", "width: " + bytePercentage + "%");
         storagePercentageDiv.innerText = bytePercentage + "%";
+        storagePercentageDiv.setAttribute("title", bytesInUse + " bytes in use");
     });
 }
 

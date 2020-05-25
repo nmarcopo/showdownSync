@@ -63,39 +63,14 @@ function returnValues(query, needReturn) {
     return JSON.stringify(objNativeGetter.find(query));
 };
 
-function saveTeams() {
-    // Use a regular expression to get rid of the iconCache that won't evaluate properly
+function getIcons() {
     let teamDiv = document.getElementById('teamData');
-    let teamData = teamDiv.innerText;
-    teamData = teamData.replace(/,"iconCache":"[^}]*"/g, '');
-    try {
-        teamData = JSON.parse(teamData);
-    } catch {
-        console.error("Could not parse JSON. Here's the team string:");
-        console.error(teamData)
-        alert("Your team is corrupted. Check the logs on play.pokemonshowdown.com for details. Try restoring a different team, or clear out your saved teams.")
-        throw Error("Could not parse JSON.")
-    }
-    // Get existing teams
-    let packedTeams = returnValues("window.Storage.getPackedTeams()", true);
-    // let packedTeams = window.Storage.getPackedTeams()
-    // Append the new team to the end of that line
-    let teamString = "\\n";
-    teamString = teamString.concat(teamData.format).concat("]");
-    teamString = teamString.concat((teamData.folder === "") ? "" : teamData.folder + "/");
-    teamString = teamString.concat(teamData.name).concat("|");
-    teamString = teamString.concat(teamData.team).concat("\"");
-
-    // Get rid of packedTeams's ending quote
-    packedTeams = packedTeams.slice(0, -1);
-    packedTeams = packedTeams.concat(teamString);
-
-    returnValues("window.Storage.loadPackedTeams(" + packedTeams + ")", false);
-    // Commit the teams to localstorage
-    returnValues("window.Storage.saveTeams()", false);
-    // Refresh the team list to add the reloaded team
-    returnValues("room.update()", false);
+    let packedTeamData = teamDiv.innerText;
+    console.log(packedTeamData);
+    // icon data
+    let packedTeams = returnValues("window.Storage.packedTeamIcons(\""+ packedTeamData +"\")", true);
     teamDiv.parentNode.removeChild(teamDiv);
+    return packedTeams;
 }
 
-saveTeams();
+getIcons();

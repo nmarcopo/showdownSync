@@ -19,7 +19,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 ## Limitations
 
 - Hard limit of 102,400 bytes synced. Check [the Chrome extension docs](https://developer.chrome.com/extensions/storage#properties) for more information.
-  - This is enough for about 30 full teams of 6 Pokemon.
+  - This is enough for about 140 full teams of 6 Pokemon.
   - I might add an option to save to Google Drive if there's enough interest for higher capacity syncing.
 - Buggy/disorganized code. I just made this in a couple of days and I haven't rigorously tested it, but if you have a problem make sure you file a GitHub issue!
 - You need to be signed into Google Chrome with a Google account and have Sync enabled.
@@ -29,12 +29,14 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Add delete button to backed up teams
 - [x] Make options page look nicer
 - [x] Add logo
+- [x] Load icons manually when user isn't on the team page already
 - [ ] Publish to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
 - [ ] Clicking "Backup" rearranges the order of the available cards
-- [ ] Small ordering bugs - sometimes the order of the cards is unpredictable
+- [x] Small ordering bugs - sometimes the order of the cards is unpredictable
 - [ ] Optimize the code to run faster
+- [ ] Hide the injected code from view
 
 ## Credits
 
