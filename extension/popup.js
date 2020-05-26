@@ -264,6 +264,17 @@ function displayTeams(teamsString, teamslist, restore) {
             });
         }
 
+        // If the iconCache == "!", then we aren't guaranteed to have the most up-to-date
+        // version of the team, i.e. editing may be in progress.
+        // See https://github.com/smogon/pokemon-showdown-client/blob/4188f623107cc5a13639fad79082406ec4aca152/js/storage.js#L1048
+        if (team.iconCache === "!"){
+            button.classList.add("disabled");
+            button.classList.add("btn-danger");
+            button.innerText = "Can't Backup"
+
+            card_text.innerText = "Can't get team. You probably have the teambuilder open for this one, please return to the main teambuilder page!";
+        }
+
         let card_details = getBootstrapElement("p", "d-none");
         card_details.setAttribute("id", "teamJSON");
         delete team.iconCache;
