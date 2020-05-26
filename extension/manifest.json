@@ -1,6 +1,6 @@
 {
     "name": "Showdown Team Backup",
-    "version": "1.0",
+    "version": "0.1.0",
     "description": "Backup teams from Pokemon Showdown across browsers!",
     "permissions": ["activeTab", "declarativeContent", "storage"],
     "background": {
