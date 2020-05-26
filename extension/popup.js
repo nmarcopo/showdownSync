@@ -272,7 +272,7 @@ function displayTeams(teamsString, teamslist, restore) {
             button.classList.add("btn-danger");
             button.innerText = "Can't Backup"
 
-            card_text.innerText = "Can't get team. You probably have the teambuilder open for this one, please return to the main teambuilder page!";
+            card_text.innerText = "Can't get team. You probably are currently editing this team in the teambuilder, please finish your edits and return to the main teambuilder page!";
         }
 
         let card_details = getBootstrapElement("p", "d-none");
