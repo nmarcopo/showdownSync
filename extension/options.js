@@ -3,8 +3,36 @@ let clearAllBackupsButton = document.getElementById("clearAllBackupsButton");
 let forceUpdateCheckButton = document.getElementById("forceUpdateCheckButton");
 let forceUpdateCheckText = document.getElementById("forceUpdateCheckText");
 
+/*
+FIXME: this function needs to be duplicated in both popup.js and options.js
+because I can't share the function via an import. When I try to make popup.js
+a module, the extension doesn't work correctly. Need to look into why this is
+*/
+function checkError(errorMessage){
+    console.error(errorMessage);
+    if(errorMessage.includes("QUOTA_BYTES_PER_ITEM")){
+        alert("Error, the team is too large to store. Try storing a smaller team.");
+    }else if(errorMessage.includes("QUOTA_BYTES")){
+        alert("Error, you've used up all of your storage space. Delete some teams from the restore tab and try again.");
+    }else if(errorMessage.includes("MAX_ITEMS")){
+        alert("Error, you've stored more than 512 teams. Delete some if you want to store more!");
+    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_HOUR")){
+        alert("Error, you've backed up or removed too many teams this hour. Please wait an hour and try again.");
+    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_MINUTE")){
+        alert("Error, you've backed up or removed too many teams this minute. Please wait a minute and try again.");
+    }else{
+        alert("Check the logs - there's been some other error with your request.");
+    }
+}
+
 function clearAllBackups() {
     chrome.storage.sync.clear(function () {
+        // Check to see if there were any errors
+        if (chrome.runtime.lastError) {
+            let errorMessage = chrome.runtime.lastError;
+            checkError(errorMessage);
+            return;
+        }
         clearBackupsText.innerText = "Backups have been cleared.";
         clearAllBackupsButton.classList.add("disabled")
     });

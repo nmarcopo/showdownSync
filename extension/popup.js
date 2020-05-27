@@ -57,13 +57,41 @@ function hashTeam(teamString) {
     return hash;
 }
 
+/*
+FIXME: this function needs to be duplicated in both popup.js and options.js
+because I can't share the function via an import. When I try to make popup.js
+a module, the extension doesn't work correctly. Need to look into why this is
+*/
+function checkError(errorMessage){
+    console.error(errorMessage);
+    if(errorMessage.includes("QUOTA_BYTES_PER_ITEM")){
+        alert("Error, the team is too large to store. Try storing a smaller team.");
+    }else if(errorMessage.includes("QUOTA_BYTES")){
+        alert("Error, you've used up all of your storage space. Delete some teams from the restore tab and try again.");
+    }else if(errorMessage.includes("MAX_ITEMS")){
+        alert("Error, you've stored more than 512 teams. Delete some if you want to store more!");
+    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_HOUR")){
+        alert("Error, you've backed up or removed too many teams this hour. Please wait an hour and try again.");
+    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_MINUTE")){
+        alert("Error, you've backed up or removed too many teams this minute. Please wait a minute and try again.");
+    }else{
+        alert("Check the logs - there's been some other error with your request.");
+    }
+}
+
 function backup(card) {
     let teamJSON = card.querySelector("#teamJSON").innerText;
     let teamKey = hashTeam(teamJSON);
     chrome.storage.sync.set({
         [teamKey]: teamJSON
     }, function () {
-        console.log("Saved key " + teamKey + " with value " + teamJSON)
+        // Check to see if there were any errors
+        if (chrome.runtime.lastError) {
+            let errorMessage = chrome.runtime.lastError.message;
+            checkError(errorMessage);
+            return;
+        }
+        console.log("Saved key " + teamKey + " with value " + teamJSON);
     });
 
     // Make sure the restored list gets updated correctly
@@ -151,13 +179,19 @@ function deleteFromSync(card) {
 
     console.log("deleting team id " + teamKey + "...");
     chrome.storage.sync.remove(teamKey, function () {
+        // Check to see if there were any errors
+        if (chrome.runtime.lastError) {
+            let errorMessage = chrome.runtime.lastError;
+            checkError(errorMessage);
+            return;
+        }
         console.log("removed team id " + teamKey);
     });
 
     deleteRemoteCard(teamKey, card);
 }
 
-function createNoTeamsAvailableCard(){
+function createNoTeamsAvailableCard() {
     let card = getBootstrapElement("div", "card");
     card.classList.add("mb-1");
     card.classList.add("text-center");
@@ -267,7 +301,7 @@ function displayTeams(teamsString, teamslist, restore) {
         // If the iconCache == "!", then we aren't guaranteed to have the most up-to-date
         // version of the team, i.e. editing may be in progress.
         // See https://github.com/smogon/pokemon-showdown-client/blob/4188f623107cc5a13639fad79082406ec4aca152/js/storage.js#L1048
-        if (team.iconCache === "!"){
+        if (team.iconCache === "!") {
             button.classList.add("disabled");
             button.classList.add("btn-danger");
             button.innerText = "Can't Backup"
@@ -294,9 +328,9 @@ function moveDisabledToBottom(list, query) {
     let enabledArray = []
     for (let team of list.children) {
         let checkQuery = null;
-        try{
+        try {
             checkQuery = team.querySelector("#actionButton").classList.contains(query);
-        }catch{
+        } catch {
             // the team action button doesn't exist. we can continue
             continue;
         }
@@ -318,7 +352,7 @@ function moveDisabledToBottom(list, query) {
     }
     let listArray = enabledArray.concat(disabledArray);
     let newList = list.cloneNode(false);
-    if (listArray.length === 0 || listArray[0] === undefined){
+    if (listArray.length === 0 || listArray[0] === undefined) {
         // We have no elements in the list. Push the "No teams available" card
         listArray = [];
         listArray.push(createNoTeamsAvailableCard());

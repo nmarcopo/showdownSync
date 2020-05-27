@@ -31,7 +31,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Add logo
 - [x] Load icons manually when user isn't on the team page already
 - [x] Backups when icons were not loaded manually still store the icons
-- [ ] Publish to Chrome Web Store
+- [ ] Publish publicly to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
 - [ ] Add option to restore all from backup
 - [x] Clicking "Backup" rearranges the order of the available cards
@@ -39,7 +39,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [ ] Optimize the code to run faster
 - [x] Hide the injected code from view
 - [ ] Fix Javascript error when running `room.update()` without teambuilder open
-- [ ] Check to make sure we haven't [exceeded limits](https://developer.chrome.com/extensions/storage#properties) in Chrome sync
+- [x] Check to make sure we haven't [exceeded limits](https://developer.chrome.com/extensions/storage#properties) in Chrome sync
 
 ## Release history
 
