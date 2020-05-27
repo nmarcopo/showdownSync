@@ -10,3 +10,9 @@ chrome.runtime.onInstalled.addListener(function () {
         }]);
     });
 });
+
+// When an update is forced
+chrome.runtime.onUpdateAvailable.addListener(function (details) {
+    console.log("Updating Showdown Team Backup to version " + details.version);
+    chrome.runtime.reload();
+});

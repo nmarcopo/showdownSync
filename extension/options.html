@@ -15,6 +15,7 @@
         <div class="card mx-auto" style="width: 35em;">
             <h5 class="card-header">Extension Options</h5>
             <div class="card-body">
+
                 <div class="card mx-auto mb-2">
                     <h5 class="card-header">Clear all Backups</h5>
                     <div class="card-body">
@@ -28,7 +29,7 @@
                     </div>
                 </div>
 
-                <div class="card mx-auto">
+                <div class="card mx-auto mb-2">
                     <h5 class="card-header">View Source on GitHub!</h5>
                     <div class="card-body">
                         <div class="container text-center">
@@ -38,6 +39,20 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card mx-auto mb-2">
+                    <h5 class="card-header">Force Check for Updates</h5>
+                    <div class="card-body">
+                        <p class="card-text">If there's an update available but you haven't received it, you can force
+                            Chrome to attempt to update it here. This will not work if you click it too often, so only
+                            do so when there is an update.</p>
+                        <div id="forceUpdateCheckDiv" class="container text-center">
+                            <p id="forceUpdateCheckText"></p>
+                            <button id="forceUpdateCheckButton" class="btn btn-primary mx-auto">Force Update</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

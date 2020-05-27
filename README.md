@@ -40,6 +40,11 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Hide the injected code from view
 - [ ] Fix Javascript error when running `room.update()` without teambuilder open
 
+## Release history
+
+- 0.1.1: Fix bug when user backs up team while editing it, update logo
+- 0.1.0: Initial release
+
 ## Credits
 
 Big thanks to the following resources:
