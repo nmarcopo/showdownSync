@@ -1,6 +1,8 @@
-function getBootstrapElement(element_name, class_name) {
+function getBootstrapElement(element_name, class_names) {
     let element = document.createElement(element_name);
-    element.classList.add(class_name);
+    for (class_name of class_names){
+        element.classList.add(class_name);
+    }
     return element;
 }
 
@@ -62,19 +64,19 @@ FIXME: this function needs to be duplicated in both popup.js and options.js
 because I can't share the function via an import. When I try to make popup.js
 a module, the extension doesn't work correctly. Need to look into why this is
 */
-function checkError(errorMessage){
+function checkError(errorMessage) {
     console.error(errorMessage);
-    if(errorMessage.includes("QUOTA_BYTES_PER_ITEM")){
+    if (errorMessage.includes("QUOTA_BYTES_PER_ITEM")) {
         alert("Error, the team is too large to store. Try storing a smaller team.");
-    }else if(errorMessage.includes("QUOTA_BYTES")){
+    } else if (errorMessage.includes("QUOTA_BYTES")) {
         alert("Error, you've used up all of your storage space. Delete some teams from the restore tab and try again.");
-    }else if(errorMessage.includes("MAX_ITEMS")){
+    } else if (errorMessage.includes("MAX_ITEMS")) {
         alert("Error, you've stored more than 512 teams. Delete some if you want to store more!");
-    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_HOUR")){
+    } else if (errorMessage.includes("MAX_WRITE_OPERATIONS_PER_HOUR")) {
         alert("Error, you've backed up or removed too many teams this hour. Please wait an hour and try again.");
-    }else if(errorMessage.includes("MAX_WRITE_OPERATIONS_PER_MINUTE")){
+    } else if (errorMessage.includes("MAX_WRITE_OPERATIONS_PER_MINUTE")) {
         alert("Error, you've backed up or removed too many teams this minute. Please wait a minute and try again.");
-    }else{
+    } else {
         alert("Check the logs - there's been some other error with your request.");
     }
 }
@@ -124,7 +126,7 @@ function restoreList(init = false) {
         // Check if there's nothing in storage
         if (Object.keys(syncedTeams).length === 0 && syncedTeams.constructor === Object) {
             // still use displayTeams function so it can be filled with "no teams available"
-            displayTeams("[]", "syncedTeams", true)
+            displayTeams("[restore]", "syncedTeams", true)
             return;
         }
 
@@ -137,8 +139,6 @@ function restoreList(init = false) {
         teamString = teamString.slice(0, -1); // Get rid of trailing comma
         teamString = teamString.concat("]");
 
-        // Clear out the restore list before displaying new ones
-        document.getElementById("syncedTeams").innerHTML = "";
         displayTeams(teamString, "syncedTeams", true);
 
         // Now, disable backing up ones that are already backed up
@@ -191,15 +191,20 @@ function deleteFromSync(card) {
     deleteRemoteCard(teamKey, card);
 }
 
-function createNoTeamsAvailableCard() {
-    let card = getBootstrapElement("div", "card");
+function createNoTeamsAvailableCard(additionalMessage = "") {
+    let card = getBootstrapElement("div", ["card"]);
     card.classList.add("mb-1");
     card.classList.add("text-center");
 
-    let card_body = getBootstrapElement("div", "card-body");
+    let card_body = getBootstrapElement("div", ["card-body"]);
     card_body.classList.add("p-1");
-    let card_title = getBootstrapElement("small", "card-title");
-    card_title.innerHTML = "<strong>No teams available.</strong>";
+    let card_title = getBootstrapElement("small", ["card-title"]);
+    let message = "<strong>No teams available.</strong>";
+    // We have another message to add to the message box
+    if (additionalMessage !== "") {
+        message = message.concat(" ").concat(additionalMessage);
+    }
+    card_title.innerHTML = message;
 
     card_body.appendChild(card_title);
     card.appendChild(card_body);
@@ -217,6 +222,10 @@ function displayTeams(teamsString, teamslist, restore) {
     if (teamsString === "[]") {
         teamList.appendChild(createNoTeamsAvailableCard());
         return;
+    } else if (teamsString === "[restore]") {
+        // We have no synced teams available. Add advice to no teams available
+        teamList.appendChild(createNoTeamsAvailableCard("Are you connected to the correct email? If not, sign into Chrome using the correct email. See <a href=\"https://google.com\" target=\"blank\">our FAQs</a> for more help."));
+        return;
     }
 
     try {
@@ -228,7 +237,7 @@ function displayTeams(teamsString, teamslist, restore) {
         throw new Error("Teams cannot be parsed")
     }
     for (team of teams) {
-        let card = getBootstrapElement("div", "card");
+        let card = getBootstrapElement("div", ["card"]);
         card.classList.add("mb-1");
         card.classList.add("text-center");
 
@@ -261,13 +270,13 @@ function displayTeams(teamsString, teamslist, restore) {
             buttonGroup.appendChild(deleteButton);
         }
 
-        let card_body = getBootstrapElement("div", "card-body");
+        let card_body = getBootstrapElement("div", ["card-body"]);
         card_body.classList.add("p-1");
-        let card_title = getBootstrapElement("small", "card-title");
+        let card_title = getBootstrapElement("small", ["card-title"]);
         card_title.setAttribute("id", "teamName");
         card_title.innerHTML = "[" + sanitize(team.format) + "] " + sanitize(team.folder) + (team.folder !== "" ? "/" : "") + "<strong>" + sanitize(team.name) + "</strong>";
 
-        let card_text = getBootstrapElement("p", "card-text");
+        let card_text = getBootstrapElement("p", ["card-text"]);
         card_text.classList.add("d-flex");
         card_text.classList.add("justify-content-center");
         card_text.classList.add("m-1");
@@ -309,7 +318,7 @@ function displayTeams(teamsString, teamslist, restore) {
             card_text.innerText = "Can't get team. You probably are currently editing this team in the teambuilder, please finish your edits and return to the main teambuilder page!";
         }
 
-        let card_details = getBootstrapElement("p", "d-none");
+        let card_details = getBootstrapElement("p", ["d-none"]);
         card_details.setAttribute("id", "teamJSON");
         delete team.iconCache;
         card_details.innerText = JSON.stringify(team)
@@ -321,6 +330,7 @@ function displayTeams(teamsString, teamslist, restore) {
         card.appendChild(card_details)
         teamList.appendChild(card);
     }
+
 }
 
 function moveDisabledToBottom(list, query) {
@@ -522,6 +532,22 @@ function updateProgressBar() {
         storagePercentageDiv.setAttribute("title", bytesInUse + " bytes in use");
     });
 }
+
+// Send message to background.js to let it know to send email over
+chrome.runtime.sendMessage({
+    msg: "openedExtension"
+});
+
+// Check messages sent from background.js for email
+chrome.runtime.onMessage.addListener(
+    function (request, _sender, sendResponse) {
+        console.log(request);
+        let emailSyncLabel = document.getElementById("emailSyncLabel");
+        if (request.msg === "email") {
+            emailSyncLabel.innerText = request.content;
+        }
+    }
+);
 
 // Main execution
 loadTeamsInShowdown();

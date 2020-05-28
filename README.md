@@ -40,9 +40,13 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Hide the injected code from view
 - [ ] Fix Javascript error when running `room.update()` without teambuilder open
 - [x] Check to make sure we haven't [exceeded limits](https://developer.chrome.com/extensions/storage#properties) in Chrome sync
+- [ ] Refresh restore list with button
+- [x] Show user's account info so they can make sure they're syncing to the same account
+- [ ] Icons in the "restore" list are wrong.
 
 ## Release history
 
+- 0.1.3: Ensure limits haven't been exceeded for sync storage
 - 0.1.2: Added option to force an update if not already downloaded
 - 0.1.1: Fix bug when user backs up team while editing it, update logo
 - 0.1.0: Initial release
@@ -61,3 +65,15 @@ Big thanks to the following resources:
   - [License here](https://fontawesome.com/license), changes were made to the "Sync" glyph - added a Pokeball
 
 And the hundreds of other StackOverflow pages and random JavaScript references I used but can't recall.
+
+## FAQs
+
+- Q: My teams are not syncing!
+  - A: Make sure that you are connected to the correct email on both of your browsers. The "Connected to email" part of the extension should be the same on both browsers' extensions: ![Connected to email screenshot]('./FAQ-sc1.png')
+    See the next question if the emails are different.
+
+- Q: My "Connected to email" emails are different between browsers!
+  - A: You'll need to sign into the same account on both browsers. See [this guide](https://www.support.com/how-to/how-to-sign-in-to-chrome-12694) for information on how to sign in to Google Chrome.
+
+- Q: My teams are not syncing, and the connected emails are the same!
+  - A: First, make sure you've waited a minute for your teams to sync, then close and re-open the extension. If they still haven't synced, make sure you have sync enabled on your account. See [this support article](https://support.google.com/chrome/answer/185277?co=GENIE.Platform%3DDesktop&hl=en-GB) for information on how to turn sync on.

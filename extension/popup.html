@@ -13,14 +13,21 @@
             <h2 class="mt-2">Showdown Team Sync</h1>
         </header>
         <div class="mb-2">
-            <small>Sync Storage Remaining:</small>
-            <small id="storagePercentageLabel" data-toggle="tooltip" title="hello world">0%</small>
+            <div>
+                <small>Connected to email: </small>
+                <small id="emailSyncLabel"></small>
+            </div>
+            <div>
+                <small>Sync Storage Remaining:</small>
+                <small id="storagePercentageLabel" data-toggle="tooltip" title="hello world">0%</small>
+            </div>
             <div class="progress">
                 <div class="progress-bar bg-info" role="progressbar" id="storageProgress"></div>
             </div>
         </div>
         <div class="d-flex justify-content-center mb-2">
-            <input id="searchLocalTeams" class="form-control form-control-sm mr-sm-2 w-50" type="text" placeholder="Search Team Names">
+            <input id="searchLocalTeams" class="form-control form-control-sm mr-sm-2 w-50" type="text"
+                placeholder="Search Team Names">
         </div>
         <nav class="d-flex justify-content-center">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
