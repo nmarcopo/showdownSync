@@ -42,7 +42,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Check to make sure we haven't [exceeded limits](https://developer.chrome.com/extensions/storage#properties) in Chrome sync
 - [ ] Refresh restore list with button
 - [x] Show user's account info so they can make sure they're syncing to the same account
-- [ ] Icons in the "restore" list are wrong.
+- [ ] Icons in the "restore" list are wrong after refreshing many times. Potentially an async issue or IP getting flagged for requesting assets so many times
 
 ## Release history
 
