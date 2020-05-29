@@ -69,7 +69,10 @@ And the hundreds of other StackOverflow pages and random JavaScript references I
 ## FAQs
 
 - Q: My teams are not syncing!
-  - A: Make sure that you are connected to the correct email on both of your browsers. The "Connected to email" part of the extension should be the same on both browsers' extensions: ![Connected to email screenshot]('./FAQ-sc1.png')
+  - A: Make sure that you are connected to the correct email on both of your browsers. The "Connected to email" part of the extension should be the same on both browsers' extensions:
+  
+  ![Connected to email screenshot](./FAQ-sc1.png)
+    
     See the next question if the emails are different.
 
 - Q: My "Connected to email" emails are different between browsers!
