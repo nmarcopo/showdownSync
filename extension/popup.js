@@ -224,7 +224,7 @@ function displayTeams(teamsString, teamslist, restore) {
         return;
     } else if (teamsString === "[restore]") {
         // We have no synced teams available. Add advice to no teams available
-        teamList.appendChild(createNoTeamsAvailableCard("Are you connected to the correct email? If not, sign into Chrome using the correct email. See <a href=\"https://google.com\" target=\"blank\">our FAQs</a> for more help."));
+        teamList.appendChild(createNoTeamsAvailableCard("Are you connected to the correct email? If not, sign into Chrome using the correct email. See <a href=\"https://github.com/nmarcopo/showdownSync#faqs\" target=\"blank\">our FAQs</a> for more help."));
         return;
     }
 
