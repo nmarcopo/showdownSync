@@ -21,10 +21,10 @@ function sanitize(string) {
 }
 
 function showTeams(searchTerm) {
-    var videos = document.getElementsByClassName("card");
-    Array.from(videos).forEach(element => {
+    var teams = document.getElementsByClassName("card");
+    Array.from(teams).forEach(element => {
         if (!element.children[0].children[0].innerText.toLowerCase().includes(searchTerm.toLowerCase())) {
-            // if the search result is not in one of the strings of videos, hide it
+            // if the search result is not in one of the strings of teams, hide it
             element.classList.add("d-none");
         } else {
             // if it is, show it
@@ -32,6 +32,16 @@ function showTeams(searchTerm) {
         }
     });
     localStorage.setItem("localSearchTerm", searchTerm);
+    let clearSearchButton = document.getElementById("clearSearchButton");
+    if(searchTerm === ""){
+        clearSearchButton.classList.add("btn-secondary");
+        clearSearchButton.classList.remove("btn-info");
+        clearSearchButton.classList.add("disabled");
+    }else{
+        clearSearchButton.classList.add("btn-info");
+        clearSearchButton.classList.remove("btn-secondary");
+        clearSearchButton.classList.remove("disabled");
+    }
 }
 
 function search() {
@@ -517,7 +527,6 @@ function loadTeamsInShowdown() {
         displayTeams(ret[0], "localTeams");
         restoreList("init");
         startButtonListeners();
-        // disableDuplicates();
     });
 }
 
@@ -552,3 +561,9 @@ chrome.runtime.onMessage.addListener(
 // Main execution
 loadTeamsInShowdown();
 updateProgressBar();
+document.getElementById("clearSearchButton").addEventListener("click", function () {
+    console.log("clearing");
+    let searchbox = document.getElementById("searchLocalTeams");
+    searchbox.value = "";
+    search(searchbox.value);
+}, false);
