@@ -331,6 +331,9 @@ function displayTeams(teamsString, teamslist, restore) {
         let card_details = getBootstrapElement("p", ["d-none"]);
         card_details.setAttribute("id", "teamJSON");
         delete team.iconCache;
+        // This doesn't exist sometimes, so we should delete it every time. Also,
+        // it's irrelevant since every format includes the gen in its title (e.g. [Gen 8] Random Battles)
+        delete team.gen;
         card_details.innerText = JSON.stringify(team)
 
         card_body.appendChild(card_title);
