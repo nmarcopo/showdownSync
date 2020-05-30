@@ -46,6 +46,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 
 ## Release history
 
+- 0.1.4: Added FAQ link and display synced email
 - 0.1.3: Ensure limits haven't been exceeded for sync storage
 - 0.1.2: Added option to force an update if not already downloaded
 - 0.1.1: Fix bug when user backs up team while editing it, update logo
