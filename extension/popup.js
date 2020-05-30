@@ -162,7 +162,13 @@ function deleteRemoteCard(teamKey, card) {
 
     // Go through each combination and see if there's a match
     for (let availableTeam of availableTeams.children) {
-        let availableTeamKey = hashTeam(availableTeam.querySelector("#teamJSON").innerText).toString();
+        let availableTeamKey = null;
+        try {
+            availableTeamKey = hashTeam(availableTeam.querySelector("#teamJSON").innerText).toString();
+        } catch {
+            // we only have the "no teams available" card pushed
+            break;
+        }
         if (availableTeamKey === teamKey) {
             // Enable button and change its color
             enableButton(availableTeam.querySelector("#actionButton"), "btn-secondary", "btn-primary", "Backup", backupOnClick);
@@ -517,7 +523,7 @@ function disableDuplicates(init = false) {
     restoreTeams.parentNode.replaceChild(moveDisabledToBottom(restoreTeams, query), restoreTeams)
 
     startButtonListeners();
-    search();
+    showTeams(document.getElementById("searchLocalTeams").value);
 }
 
 // Runs when extension is loaded
@@ -526,10 +532,11 @@ function loadTeamsInShowdown() {
     chrome.tabs.executeScript(null, {
         file: "getAvailableTeams.js"
     }, function (ret) {
-        document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
         displayTeams(ret[0], "localTeams");
         restoreList("init");
         startButtonListeners();
+        document.getElementById("searchLocalTeams").value = localStorage.getItem("localSearchTerm");
+        search();
     });
 }
 
@@ -572,5 +579,5 @@ document.getElementById("clearSearchButton").addEventListener("click", function 
     console.log("clearing");
     let searchbox = document.getElementById("searchLocalTeams");
     searchbox.value = "";
-    search(searchbox.value);
+    showTeams(searchbox.value);
 }, false);
