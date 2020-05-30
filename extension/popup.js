@@ -1,6 +1,6 @@
 function getBootstrapElement(element_name, class_names) {
     let element = document.createElement(element_name);
-    for (class_name of class_names){
+    for (class_name of class_names) {
         element.classList.add(class_name);
     }
     return element;
@@ -33,11 +33,11 @@ function showTeams(searchTerm) {
     });
     localStorage.setItem("localSearchTerm", searchTerm);
     let clearSearchButton = document.getElementById("clearSearchButton");
-    if(searchTerm === ""){
+    if (searchTerm === "") {
         clearSearchButton.classList.add("btn-secondary");
         clearSearchButton.classList.remove("btn-info");
         clearSearchButton.classList.add("disabled");
-    }else{
+    } else {
         clearSearchButton.classList.add("btn-info");
         clearSearchButton.classList.remove("btn-secondary");
         clearSearchButton.classList.remove("disabled");
@@ -556,7 +556,11 @@ chrome.runtime.onMessage.addListener(
         console.log(request);
         let emailSyncLabel = document.getElementById("emailSyncLabel");
         if (request.msg === "email") {
-            emailSyncLabel.innerText = request.content;
+            if (request.content === "") {
+                emailSyncLabel.innerText = "No email connected."
+            } else {
+                emailSyncLabel.innerText = request.content;
+            }
         }
     }
 );
