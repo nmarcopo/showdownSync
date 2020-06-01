@@ -1,0 +1,7 @@
+myenv/
+.vscode
+driver/
+*.zip
+.DS_Store
+testExtension/
+__pycache__/
