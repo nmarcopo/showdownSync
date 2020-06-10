@@ -8,9 +8,8 @@ import unittest
 class BrowserActions:
     def __init__(self, extensionDir='../extension', testExtensionDir='testExtension',
                 manifestPath='manifest.json', extensionPage="chrome://extensions",
-                mainPage="https://play.pokemonshowdown.com", executablePath="driver/chromedriver"):
+                mainPage="https://play.pokemonshowdown.com"):
         
-        self.executablePath = executablePath
         self.extensionDir = extensionDir
         self.testExtensionDir = testExtensionDir
         self.manifestPath = manifestPath
@@ -40,7 +39,7 @@ class BrowserActions:
         # Can't use chrome headless with browser extensions. See bug:
         # https://bugs.chromium.org/p/chromium/issues/detail?id=706008#c5
         # chrome_options.add_argument('--headless')
-        self.driver = webdriver.Chrome(options=chrome_options, executable_path=self.executablePath)
+        self.driver = webdriver.Chrome(options=chrome_options)
 
     def loadExtensionId(self):
         self.driver.get(self.extensionPage)
