@@ -9,10 +9,8 @@ addons:
   apt:
     packages:
       - chromium-chromedriver
-install: pip install selenium
-before_script:
-  # include ChromeDriver in PATH
-  - ln --symbolic /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
+before_install:
   - cd tests
+install: pip install -r requirements.txt
 script:
   - pytest

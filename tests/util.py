@@ -1,6 +1,7 @@
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import shutil, errno
 from time import sleep
 import unittest
@@ -39,7 +40,7 @@ class BrowserActions:
         # Can't use chrome headless with browser extensions. See bug:
         # https://bugs.chromium.org/p/chromium/issues/detail?id=706008#c5
         # chrome_options.add_argument('--headless')
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 
     def loadExtensionId(self):
         self.driver.get(self.extensionPage)
