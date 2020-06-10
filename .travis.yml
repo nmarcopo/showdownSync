@@ -4,11 +4,6 @@ python:
 dist: xenial
 services:
   - xvfb
-addons:
-  chrome: stable
-  apt:
-    packages:
-      - chromium-chromedriver
 before_install:
   - cd tests
 install: pip install -r requirements.txt
