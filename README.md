@@ -1,5 +1,7 @@
 # Pokemon Showdown Team Sync ![logo](extension/img/logo_32.png) 
 
+[![Build Status](https://travis-ci.org/nmarcopo/showdownSync.svg?branch=master)](https://travis-ci.org/nmarcopo/showdownSync)
+
 This is a chrome extension that can sync teams between browsers on [Pokemon Showdown](https://play.pokemonshowdown.com) using Chrome sync data.
 
 ## Demo
