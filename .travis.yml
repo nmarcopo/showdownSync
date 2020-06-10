@@ -6,8 +6,13 @@ services:
   - xvfb
 addons:
   chrome: stable
+  apt:
+    packages:
+      - chromium-chromedriver
 install: pip install selenium
 before_script:
+  # include ChromeDriver in PATH
+  - ln --symbolic /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
   - cd tests
 script:
   - pytest
