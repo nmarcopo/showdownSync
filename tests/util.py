@@ -37,7 +37,9 @@ class BrowserActions:
     def setUpDriver(self):
         chrome_options = Options()
         chrome_options.add_argument('load-extension=' + self.testExtensionDir)
-
+        # Can't use chrome headless with browser extensions. See bug:
+        # https://bugs.chromium.org/p/chromium/issues/detail?id=706008#c5
+        # chrome_options.add_argument('--headless')
         self.driver = webdriver.Chrome(options=chrome_options, executable_path=self.executablePath)
 
     def loadExtensionId(self):

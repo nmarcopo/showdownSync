@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.6.7"
+dist: xenial
+services:
+  - xvfb
+addons:
+  chrome: stable
+install: pip install selenium
+before_script:
+  - cd tests
+script:
+  - pytest
