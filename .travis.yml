@@ -4,6 +4,8 @@ python:
 dist: xenial
 services:
   - xvfb
+addons:
+  chrome: stable
 before_install:
   - cd tests
   - google-chrome --version
