@@ -35,6 +35,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [x] Backups when icons were not loaded manually still store the icons
 - [ ] Publish publicly to Chrome Web Store
 - [ ] Add option to back up all if there's enough space
+  - Previously thought this wouldn't be possible with rate limit but it appears you can do bulk write operations with [chrome storage set method](https://developer.chrome.com/extensions/storage)
 - [ ] Add option to restore all from backup
 - [x] Clicking "Backup" rearranges the order of the available cards
 - [x] Small ordering bugs - sometimes the order of the cards is unpredictable
