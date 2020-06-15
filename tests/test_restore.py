@@ -1,4 +1,9 @@
 from util import BrowserActions, LocalStorage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import StaleElementReferenceException
+from time import sleep
 import unittest
 
 class TestRestore(unittest.TestCase):
@@ -39,23 +44,34 @@ class TestRestore(unittest.TestCase):
         assert teams == expected_team, f"Error, team was not restored correctly.\nLocalstorage data: {teams}, expected: {expected_team}"
 
     """
-    Backup one team.
+    Restore one team.
     Only one team available, no teams in backup already.
-    Tests that buttons are enabled/disabled properly after backing up.
+    Tests that buttons are enabled/disabled properly after restoring up.
     The "restore" button should be disabled, the "delete" button should be enabled,
     and the "backup" button should be disabled.
     """
-    """
-    def test_backup_noOtherBackups_buttons(self):
-        self.bA.driver.find_element_by_id("actionButton").click()
+    def test_restore_noOtherBackups_buttons(self):
+        # Click restore
+        self.bA.driver.find_element_by_id("nav-restore-tab").click()
         self.bA.driver.implicitly_wait(5)
-        # Check to make sure buttons are enabled/disabled correctly
-        [restoreButton, deleteButton] = self.bA.driver.find_elements_by_xpath("//ul[contains(@id,'syncedTeams')]/div/div/div/button")
-        restoreButtonClassList = restoreButton.get_attribute("class").split()
-        deleteButtonClassList = deleteButton.get_attribute("class").split()
+        self.bA.driver.find_element_by_id("actionButton").click()
+        # implicitly waiting isn't enough here because the finding elements by xpath function doesn't wait for the classlist to populate.
+        # we need to wait for this to happen
+        # If there's a StaleElementReferenceException, get the elements again
+        stale = True
+        tries = 0
+        while stale and tries < 5:
+            try:
+                [restoreButton, deleteButton] = self.bA.driver.find_elements_by_xpath("//ul[contains(@id,'syncedTeams')]/div/div/div/button")
+                restoreButtonClassList = restoreButton.get_attribute("class").split()
+                deleteButtonClassList = deleteButton.get_attribute("class").split()
+                stale = False
+            except StaleElementReferenceException:
+                # Try to get the elements again up to 5 times
+                tries += 1
         backupButtonClassList = self.bA.driver.find_elements_by_xpath("//ul[contains(@id,'localTeams')]/div/div/div/button")[0].get_attribute("class").split()
+        # Check to make sure buttons are enabled/disabled correctly
         assert "disabled" in restoreButtonClassList and "disabled" not in deleteButtonClassList and "disabled" in backupButtonClassList, f"Error, buttons are not enabled/disabled correctly.\nrestoreButton class list: {restoreButtonClassList}, expected: btn disabled btn-secondary\ndeleteButton class list: {deleteButtonClassList}, expected: btn btn-danger\nbackupButton class list: {backupButtonClassList}, expected: btn disabled btn-secondary"
-    """
 
     """
     Destroy the test environment

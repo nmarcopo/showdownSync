@@ -7,7 +7,7 @@ These are some automated tests for the Showdown Team Sync extension. They're run
 - [x] Test for correct JSON after backing up a team
 - [x] Test for buttons working correctly after backing up a team
 - [x] Test for correct team imported when restoring a team
-- [ ] Test for buttons working correctly when restoring a team
+- [x] Test for buttons working correctly when restoring a team
 - [ ] Test to make sure team is deleted correctly
 - [ ] Test for buttons working correctly after deleting a team
 - [ ] Test for search working correctly
