@@ -69,6 +69,8 @@ class TestRestore(unittest.TestCase):
             except StaleElementReferenceException:
                 # Try to get the elements again up to 5 times
                 tries += 1
+                if tries >= 5:
+                    raise Exception("Max stale element retries exceeded.")
         backupButtonClassList = self.bA.driver.find_elements_by_xpath("//ul[contains(@id,'localTeams')]/div/div/div/button")[0].get_attribute("class").split()
         # Check to make sure buttons are enabled/disabled correctly
         assert "disabled" in restoreButtonClassList and "disabled" not in deleteButtonClassList and "disabled" in backupButtonClassList, f"Error, buttons are not enabled/disabled correctly.\nrestoreButton class list: {restoreButtonClassList}, expected: btn disabled btn-secondary\ndeleteButton class list: {deleteButtonClassList}, expected: btn btn-danger\nbackupButton class list: {backupButtonClassList}, expected: btn disabled btn-secondary"
