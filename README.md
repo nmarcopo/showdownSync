@@ -48,6 +48,8 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [ ] Icons in the "restore" list are wrong after refreshing many times. Potentially an async issue or IP getting flagged for requesting assets so many times
 - [x] Sometimes the teams are not recognized as duplicates in Sync and Local
   - This happens because gens are not assigned to the JSON until after `room.update()` is called, apparently
+- [ ] Give option to update the backed up team by name
+  - Maybe it would be easier to use the team name instead of the hash for the key?
 
 ## Release history
 
