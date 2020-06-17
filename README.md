@@ -50,6 +50,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
   - This happens because gens are not assigned to the JSON until after `room.update()` is called, apparently
 - [ ] Give option to update the backed up team by name
   - Maybe it would be easier to use the team name instead of the hash for the key?
+- [ ] Somehow show the team details beyond just the name and icons
 
 ## Release history
 
