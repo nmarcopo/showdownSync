@@ -5,3 +5,5 @@ driver/
 .DS_Store
 testExtension/
 __pycache__/
+node_modules/
+extension_ts/dist/
