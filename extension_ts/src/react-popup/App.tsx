@@ -1,15 +1,14 @@
 import React from "react";
-import { Card } from "@blueprintjs/core";
 
-import { Title } from "./Title"
-import { Team } from "../components/Team"
+import { Home } from "../components/Home"
+import { HeaderBar } from "../components/HeaderBar"
 
 export class App extends React.Component {
     render() {
         return (
-            <div>
-                <Title />
-                <Team team_name="My New Team" team_format="gen8" />
+            <div style={{ width: '50em' }} className="extension-root bp4-dark">
+                <HeaderBar />
+                <Home />
             </div>
         );
     };

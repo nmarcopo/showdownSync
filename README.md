@@ -26,6 +26,14 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - Buggy/disorganized code. I just made this in a couple of days and I haven't rigorously tested it, but if you have a problem make sure you file a GitHub issue!
 - You need to be signed into Google Chrome with a Google account and have Sync enabled.
 
+# React TODOs:
+- [ ] Team lists
+- [ ] Injection scripts
+- [ ] Backup functionality
+- [ ] Team Search
+- [ ] Remaining Storage
+- [ ] Dark Mode Toggle
+
 ## TODO:
 
 - [x] Add delete button to backed up teams

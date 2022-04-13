@@ -10,8 +10,7 @@
     "@types/react-dom": "^17.0.14",
     "normalize.css": "^8.0.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "webpack": "^5.70.0"
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@blueprintjs/eslint-plugin": "^1.0.1",
@@ -22,9 +21,12 @@
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.29.4",
+    "node-sass": "^7.0.1",
+    "sass": "^1.50.0",
+    "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.8",
-    "webpack": "^5.70.0",
+    "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2"
   }
 }
