@@ -21,12 +21,10 @@ interface TeamState {
 export class Team extends React.Component<TeamProps> {
     render() {
         return (
-            <div>
-                <Card>
-                    <H4>Team: {this.props.team_name}</H4>
-                    <H6>Format: {this.props.team_format}</H6>
-                </Card>
-            </div>
+            <Card>
+                <H4>Team: {this.props.team_name}</H4>
+                <H6>Format: {this.props.team_format}</H6>
+            </Card>
         );
     }
 }

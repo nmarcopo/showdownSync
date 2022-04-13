@@ -41,6 +41,7 @@ export class TeamListContainer extends React.Component<TeamListContainerProps, T
                 onChange={this.handleNavbarTabChange}
                 selectedTabId={this.state.navbarTabId}
             >
+                
                 {this.tabs()}
 
             </Tabs>

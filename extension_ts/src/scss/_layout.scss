@@ -2,10 +2,15 @@
 
 $nav-item-indent: $pt-grid-size * 2;
 
+$example-frame-border-radius: $pt-border-radius * 2;
+$example-spacing: $pt-grid-size * 4;
+
 $nav-item-color-hover: rgba($gray3, 0.15) !default;
 $nav-item-color-active: rgba($gray3, 0.3) !default;
 $dark-nav-item-color-hover: rgba($gray3, 0.15) !default;
 $dark-nav-item-color-active: rgba($gray3, 0.3) !default;
+$example-background-color: $white;
+$dark-example-background-color: $dark-gray3;
 
 
 .extension-root {
@@ -16,31 +21,37 @@ $dark-nav-item-color-active: rgba($gray3, 0.3) !default;
   }
 }
 
-.extension-nav {
-  $background-shift: 999px;
-  background-color: $sidebar-background-color;
-  box-shadow: 1px 0 0 $pt-divider-black;
-  height: 100vh;
-
-  // these rules allow the nav background-color to cover all area to the left
-  /* stylelint-disable-next-line order/properties-order */
-  margin-left: -$background-shift;
-  overflow-y: auto;
-  padding-bottom: $sidebar-padding * 2;
-  padding-left: $background-shift + $container-padding;
-
-  position: fixed;
-  width: $sidebar-width + $background-shift;
+.docs-example {
+  align-items: center;
+  background: $example-background-color;
+  border-radius: $example-frame-border-radius;
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  // https://css-tricks.com/flexbox-truncated-text/#article-header-id-3
+  min-width: 0;
+  padding: $example-spacing * 0.5;
+  margin-left: $example-spacing * 0.2;
+  margin-right: $example-spacing * 0.2;
 
   .#{$ns}-dark & {
-    background-color: $dark-sidebar-background-color;
-    box-shadow: 1px 0 0 $pt-dark-divider-black;
+    background: $dark-example-background-color;
   }
 
   >* {
-    padding: $sidebar-padding;
-    padding-left: 0;
+    margin: $example-spacing * 0.1;
+    width: 100%;
   }
+}
+
+.bp4-tab-panel {
+  margin: 0%;
+}
+
+.bp4-tab-list {
+  justify-content: center;
 }
 
 .extension-content-wrapper {
