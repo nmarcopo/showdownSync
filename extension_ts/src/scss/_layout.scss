@@ -54,6 +54,20 @@ $dark-example-background-color: $dark-gray3;
   justify-content: center;
 }
 
+.team-card {
+  text-align: center;
+  padding: $example-spacing * 0.2;
+
+  .team-format-tag {
+    margin-right: $example-spacing * 0.1;
+  }
+
+  >* {
+    display: block;
+    margin: $example-spacing * 0.1;
+  }
+}
+
 .extension-content-wrapper {
   align-items: flex-start;
   background-color: $content-background-color;

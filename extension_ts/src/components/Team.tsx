@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card, H4, H6 } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, H4, H6, Tag } from "@blueprintjs/core";
 
 enum Status {
     NOT_BACKED_UP,
@@ -28,9 +28,15 @@ export class Team extends React.Component<TeamProps, TeamState> {
 
     render() {
         return (
-            <Card interactive={this.state.interactive}>
-                <H4>Team: {this.props.team_name}</H4>
-                <H6>Format: {this.props.team_format}</H6>
+            <Card interactive={this.state.interactive} className="team-card" >
+                {/* <H4>Team: {this.props.team_name}</H4> */}
+                <small>
+                    <Tag className="team-format-tag">{this.props.team_format}</Tag>
+                    {this.props.team_name}
+                </small>
+                <ButtonGroup>
+                    <Button>Backup</Button>
+                </ButtonGroup>
             </Card>
         );
     }
