@@ -16,12 +16,19 @@ export interface TeamProps {
 interface TeamState {
     team_composition: string;
     team_status: Status;
+    interactive: boolean;
 }
 
-export class Team extends React.Component<TeamProps> {
+export class Team extends React.Component<TeamProps, TeamState> {
+    public state: TeamState = {
+        team_composition: "bulba, charmander",
+        team_status: Status.NOT_BACKED_UP,
+        interactive: true,
+    }
+
     render() {
         return (
-            <Card>
+            <Card interactive={this.state.interactive}>
                 <H4>Team: {this.props.team_name}</H4>
                 <H6>Format: {this.props.team_format}</H6>
             </Card>

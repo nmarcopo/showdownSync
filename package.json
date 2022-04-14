@@ -7,6 +7,7 @@
     "@blueprintjs/core": "^4.0.1",
     "@blueprintjs/docs-theme": "^4.1.2",
     "@blueprintjs/eslint-config": "^1.0.1",
+    "@blueprintjs/popover2": "^1.1.2",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "normalize.css": "^8.0.1",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@blueprintjs/eslint-plugin": "^1.0.1",
+    "@types/chrome": "^0.0.181",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "copy-webpack-plugin": "^10.2.4",

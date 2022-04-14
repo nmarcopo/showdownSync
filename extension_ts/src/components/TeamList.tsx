@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Card, H4, H6 } from "@blueprintjs/core";
-import { Team } from "./Team"
+import { Team } from "./Team";
 
 export enum TeamListType {
     AVAILABLE_TEAMS = "Available Teams",

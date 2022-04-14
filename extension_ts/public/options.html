@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" style="min-width:25em;">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://play.pokemonshowdown.com/style/battle.css">
+</head>
+
+<body>
+    <div class="container flex-container">
+        <header class="d-flex justify-content-center">
+            <h2 class="mt-2">Showdown Team Sync</h1>
+        </header>
+        <div class="card mx-auto" style="width: 35em;">
+            <h5 class="card-header">Extension Options</h5>
+            <div class="card-body">
+
+                <div class="card mx-auto mb-2">
+                    <h5 class="card-header">Clear all Backups</h5>
+                    <div class="card-body">
+                        <p class="card-text">Clear out all of your backups if you're having trouble with the
+                            extension.</p>
+                        <div id="clearBackupsDiv" class="container text-center">
+                            <p id="clearBackupsText">You have no backups to clear.</p>
+                            <button id="clearAllBackupsButton" class="btn btn-primary disabled mx-auto">Clear
+                                Backups</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mx-auto mb-2">
+                    <h5 class="card-header">View Source on GitHub!</h5>
+                    <div class="card-body">
+                        <div class="container text-center">
+                            <a href="https://github.com/nmarcopo/showdownSync" target="blank">
+                                <button class="btn btn-primary">Showdown Team Sync GitHub</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mx-auto mb-2">
+                    <h5 class="card-header">Force Check for Updates</h5>
+                    <div class="card-body">
+                        <p class="card-text">If there's an update available but you haven't received it, you can force
+                            Chrome to attempt to update it here. This will not work if you click it too often, so only
+                            do so when there is an update.</p>
+                        <div id="forceUpdateCheckDiv" class="container text-center">
+                            <p id="forceUpdateCheckText"></p>
+                            <button id="forceUpdateCheckButton" class="btn btn-primary mx-auto">Force Update</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="options.js"></script>
+<script src="jquery.js"></script>
+<script src="bootstrap.min.js"></script>
+
+</html>

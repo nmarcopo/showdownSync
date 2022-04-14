@@ -1,5 +1,6 @@
 import React from "react";
-import { Navbar, Alignment, Collapse, Button } from "@blueprintjs/core";
+import { Navbar, Alignment, Collapse, Button, Icon, Tooltip, Position } from "@blueprintjs/core";
+// import { Classes, Tooltip2 } from "@blueprintjs/popover2";
 
 export interface HeaderBarCollapseState {
     isOpen?: boolean;
@@ -18,9 +19,16 @@ export class HeaderBar extends React.Component<{}, HeaderBarCollapseState> {
                         <Navbar.Heading>Showdown Team Sync</Navbar.Heading>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
-                        <Button onClick={this.expand_button_click}>
-                            {this.state.isOpen ? "Hide" : "Show"} sync information
-                        </Button>
+                        <Tooltip
+                            content={`${this.state.isOpen ? "Hide" : "Show"} Detailed Sync Info`}
+                            position={Position.LEFT}
+                            openOnTargetFocus={false}
+                            hoverOpenDelay={300}
+                        >
+                            <Button onClick={this.expand_button_click}>
+                                <Icon icon="dashboard" />
+                            </Button>
+                        </Tooltip>
                     </Navbar.Group>
                 </Navbar>
                 <Collapse isOpen={this.state.isOpen}>
