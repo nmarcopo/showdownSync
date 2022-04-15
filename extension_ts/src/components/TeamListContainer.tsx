@@ -37,7 +37,6 @@ export class TeamListContainer extends React.Component<TeamListContainerProps, T
             <Tabs
                 animate={this.state.animate}
                 id="team_list_container"
-                large={true}
                 onChange={this.handleNavbarTabChange}
                 selectedTabId={this.state.navbarTabId}
             >
