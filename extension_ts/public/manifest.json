@@ -2,7 +2,8 @@
     "name": "Showdown Team Backup",
     "version": "1.0.0",
     "description": "Backup teams from Pokemon Showdown across browsers!",
-    "permissions": ["activeTab", "declarativeContent", "storage", "identity", "identity.email"],
+    "permissions": ["activeTab", "declarativeContent", "storage", "identity", "identity.email", "scripting"],
+    "host_permissions": ["http://*.pokemonshowdown.com/*", "https://*.pokemonshowdown.com/*"],
     "background": {
         "service_worker": "js/background.js"
     },
