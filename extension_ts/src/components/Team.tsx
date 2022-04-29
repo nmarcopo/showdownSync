@@ -28,16 +28,18 @@ export class Team extends React.Component<TeamProps, TeamState> {
 
     render() {
         return (
-            <Card interactive={this.state.interactive} className="team-card" >
-                {/* <H4>Team: {this.props.team_name}</H4> */}
-                <small>
-                    <Tag className="team-format-tag">{this.props.team_format}</Tag>
-                    {this.props.team_name}
-                </small>
-                <ButtonGroup>
-                    <Button>Backup</Button>
-                </ButtonGroup>
-            </Card>
+            <li>
+                <Card interactive={this.state.interactive} className="team-card" >
+                    {/* <H4>Team: {this.props.team_name}</H4> */}
+                    <small>
+                        <Tag className="team-format-tag">{this.props.team_format}</Tag>
+                        {this.props.team_name}
+                    </small>
+                    <ButtonGroup>
+                        <Button>Backup</Button>
+                    </ButtonGroup>
+                </Card>
+            </li>
         );
     }
 }

@@ -14,6 +14,7 @@
         "ecmaFeatures": {
             "jsx": true
         },
+        // "project": ["extension_ts/tsconfig.json"],
         "ecmaVersion": 12,
         "sourceType": "module"
     },
