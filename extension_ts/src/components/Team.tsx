@@ -32,6 +32,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
         team_composition: "bulba, charmander",
         team_status: Status.NOT_BACKED_UP,
         interactive: true,
+        // Iconcache should probably be it's own state here so the component can get updated when iconcache is loaded
     }
 
     async getIcons(team: ShowdownTeamJson) {
@@ -55,6 +56,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
                         <Tag className="team-format-tag">{this.props.team.format}</Tag>
                         {this.props.team.name}
                     </small>
+                    <span dangerouslySetInnerHTML={{ __html: this.props.team.iconCache }} />
                     <ButtonGroup>
                         <Button>Backup</Button>
                     </ButtonGroup>
