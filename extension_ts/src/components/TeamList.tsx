@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Card, H4, H6 } from "@blueprintjs/core";
-import { Team } from "./Team";
+import { Team, ShowdownTeamJson } from "./Team";
 
 export enum TeamListType {
     AVAILABLE_TEAMS = "Available Teams",
@@ -10,15 +10,6 @@ export enum TeamListType {
 
 export interface TeamListProps {
     team_list_type: TeamListType;
-}
-
-interface ShowdownTeamJson {
-    capacity: number,
-    folder: string,
-    format: string,
-    iconCache: string,
-    name: string,
-    team: string,
 }
 
 interface TeamListState {
@@ -59,7 +50,7 @@ export class TeamList extends React.Component<TeamListProps, TeamListState> {
         if (this.state.teams_data !== undefined) {
             console.log("state is defined!");
             teamsDisplay = this.state.teams_data.map(team =>
-                <Team team_format={team.format} team_name={team.name} />
+                <Team team={team} />
             );
             console.log("teamsDisplay", teamsDisplay)
         } else {
@@ -69,7 +60,7 @@ export class TeamList extends React.Component<TeamListProps, TeamListState> {
 
         return (
             <div className="docs-example">
-                <ul>
+                <ul className="bp4-list-unstyled">
                     {teamsDisplay}
                 </ul>
             </div>

@@ -9,14 +9,22 @@ enum Status {
 }
 
 export interface TeamProps {
-    team_format: string;
-    team_name: string;
+    team: ShowdownTeamJson;
 }
 
 interface TeamState {
     team_composition: string;
     team_status: Status;
     interactive: boolean;
+}
+
+export interface ShowdownTeamJson {
+    capacity: number,
+    folder: string,
+    format: string,
+    iconCache: string,
+    name: string,
+    team: string,
 }
 
 export class Team extends React.Component<TeamProps, TeamState> {
@@ -26,14 +34,26 @@ export class Team extends React.Component<TeamProps, TeamState> {
         interactive: true,
     }
 
+    async getIcons(team: ShowdownTeamJson) {
+        const [{ result }] = await chrome.scripting.executeScript({
+            func: () => (window.Storage as any).getTeamIcons(team),
+            target: {
+                tabId:
+                    (await chrome.tabs.query({ active: true, currentWindow: true }))[0].id!
+            },
+            world: 'MAIN',
+        });
+        return result;
+    }
+
     render() {
         return (
             <li>
                 <Card interactive={this.state.interactive} className="team-card" >
                     {/* <H4>Team: {this.props.team_name}</H4> */}
                     <small>
-                        <Tag className="team-format-tag">{this.props.team_format}</Tag>
-                        {this.props.team_name}
+                        <Tag className="team-format-tag">{this.props.team.format}</Tag>
+                        {this.props.team.name}
                     </small>
                     <ButtonGroup>
                         <Button>Backup</Button>
