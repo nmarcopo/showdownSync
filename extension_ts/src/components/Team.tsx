@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Button, ButtonGroup, Card, Tag, UL } from "@blueprintjs/core";
+import { SyncHandlers } from "../scripts/SyncHandlers";
 
 enum Status {
     NOT_BACKED_UP,
@@ -17,6 +18,7 @@ interface TeamState {
     team_status: Status;
     interactive: boolean;
     iconCache: string;
+    syncHandlers: SyncHandlers;
 }
 
 export interface ShowdownTeamJson {
@@ -33,8 +35,8 @@ export class Team extends React.Component<TeamProps, TeamState> {
         team_status: Status.NOT_BACKED_UP,
         interactive: true,
         iconCache: "Loading...",
-        // Iconcache should probably be it's own state here so the component can get updated when iconcache is loaded
-    }
+        syncHandlers: new SyncHandlers(),
+    };
 
     componentDidMount() {
         this.getIcons(this.props.team).then((response) => {
@@ -88,7 +90,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
                         </li>
                         <li>
                             <ButtonGroup>
-                                <Button>Backup</Button>
+                                <Button onClick={() => this.state.syncHandlers.backup_team(this.props.team)}>Backup</Button>
                             </ButtonGroup>
                         </li>
                     </UL>
