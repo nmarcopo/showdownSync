@@ -64,6 +64,12 @@ $dark-example-background-color: $dark-gray3;
     margin-right: $example-spacing * 0.1;
   }
 
+  .team-icons {
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+  }
+
   >* {
     display: block;
     margin: $example-spacing * 0.1;

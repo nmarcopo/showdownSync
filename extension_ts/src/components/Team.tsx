@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, ButtonGroup, Card, H4, H6, Tag } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, Tag, UL } from "@blueprintjs/core";
 
 enum Status {
     NOT_BACKED_UP,
@@ -58,7 +58,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
                 team_status: Status.CURRENTLY_BEING_EDITED,
             });
         }
-        const [{result}] = await chrome.scripting.executeScript({
+        const [{ result }] = await chrome.scripting.executeScript({
             func: (team) => (window.Storage as any).getTeamIcons(team),
             args: [team],
             target: {
@@ -75,15 +75,23 @@ export class Team extends React.Component<TeamProps, TeamState> {
         return (
             <li>
                 <Card interactive={this.state.interactive} className="team-card" >
-                    <small>
-                        <Tag className="team-format-tag">{this.props.team.format}</Tag>
-                        {this.props.team.name}
-                    </small>
-                    {/* DangerouslySetInnerHTML is OK here since we know that this will be sent via iconCache, so no risk of XSS */}
-                    <span dangerouslySetInnerHTML={{ __html: this.state.iconCache }} />
-                    <ButtonGroup>
-                        <Button>Backup</Button>
-                    </ButtonGroup>
+                    <UL className="bp4-list-unstyled">
+                        <li>
+                            <small>
+                                <Tag className="team-format-tag">{this.props.team.format}</Tag>
+                                {this.props.team.name}
+                            </small>
+                        </li>
+                        {/* DangerouslySetInnerHTML is OK here since we know that this will be sent via iconCache, so no risk of XSS */}
+                        <li>
+                            <div className="team-icons" dangerouslySetInnerHTML={{ __html: this.state.iconCache }} />
+                        </li>
+                        <li>
+                            <ButtonGroup>
+                                <Button>Backup</Button>
+                            </ButtonGroup>
+                        </li>
+                    </UL>
                 </Card>
             </li>
         );
