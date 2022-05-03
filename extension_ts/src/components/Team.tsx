@@ -14,7 +14,6 @@ export interface TeamProps {
 }
 
 interface TeamState {
-    team_composition: string;
     team_status: Status;
     interactive: boolean;
     iconCache: string;
@@ -31,10 +30,9 @@ export interface ShowdownTeamJson {
 
 export class Team extends React.Component<TeamProps, TeamState> {
     public state: TeamState = {
-        team_composition: "bulba, charmander",
         team_status: Status.NOT_BACKED_UP,
         interactive: true,
-        iconCache: "lorem ipsum",
+        iconCache: "Loading...",
         // Iconcache should probably be it's own state here so the component can get updated when iconcache is loaded
     }
 
@@ -55,7 +53,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
             return this.props.team.iconCache;
         }
         if (this.props.team.iconCache === "!") {
-            console.log("Team is being edited")
+            console.warn("Team is being edited")
             this.setState({
                 team_status: Status.CURRENTLY_BEING_EDITED,
             });
@@ -77,7 +75,6 @@ export class Team extends React.Component<TeamProps, TeamState> {
         return (
             <li>
                 <Card interactive={this.state.interactive} className="team-card" >
-                    {/* <H4>Team: {this.props.team_name}</H4> */}
                     <small>
                         <Tag className="team-format-tag">{this.props.team.format}</Tag>
                         {this.props.team.name}

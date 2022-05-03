@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card, H4, H6 } from "@blueprintjs/core";
+import { Card, H4, H6, UL } from "@blueprintjs/core";
 import { Team, ShowdownTeamJson } from "./Team";
 
 export enum TeamListType {
@@ -60,9 +60,9 @@ export class TeamList extends React.Component<TeamListProps, TeamListState> {
 
         return (
             <div className="docs-example">
-                <ul className="bp4-list-unstyled">
+                <UL className="bp4-list-unstyled">
                     {teamsDisplay}
-                </ul>
+                </UL>
             </div>
         );
     }
