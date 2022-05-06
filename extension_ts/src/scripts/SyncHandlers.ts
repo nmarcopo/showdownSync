@@ -20,17 +20,23 @@ export class SyncHandlers {
 
     backup_team = (team: ShowdownTeamJson) => {
         let team_sync_data = this.create_sync_data(team);
-        chrome.storage.sync.set({
-            [team_sync_data.key]: team_sync_data.data
-        }, () => {
-            // Check to see if there were any errors
-            if (chrome.runtime.lastError) {
-                let errorMessage = chrome.runtime.lastError.message;
-                if (errorMessage !== undefined) {
-                    this.check_error(errorMessage);
+        return new Promise((resolve, reject) => {
+            chrome.storage.sync.set({
+                [team_sync_data.key]: team_sync_data.data
+            }, () => {
+                // Check to see if there were any errors
+                if (chrome.runtime.lastError) {
+                    let errorMessage = chrome.runtime.lastError.message;
+                    if (errorMessage !== undefined) {
+                        this.check_error(errorMessage);
+                        reject(errorMessage);
+                        return;
+                    }
                 }
-            }
-            console.log("Saved key " + team_sync_data.key + " with value " + team_sync_data.data);
+                console.log("Saved key " + team_sync_data.key + " with value " + team_sync_data.data);
+                resolve(true);
+                return;
+            });
         });
     }
 

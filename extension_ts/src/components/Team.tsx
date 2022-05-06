@@ -19,6 +19,7 @@ interface TeamState {
     interactive: boolean;
     iconCache: string;
     syncHandlers: SyncHandlers;
+    disabled: boolean;
 }
 
 export interface ShowdownTeamJson {
@@ -36,6 +37,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
         interactive: true,
         iconCache: "Loading...",
         syncHandlers: new SyncHandlers(),
+        disabled: false,
     };
 
     componentDidMount() {
@@ -73,6 +75,33 @@ export class Team extends React.Component<TeamProps, TeamState> {
         return result;
     }
 
+    async backup_callback() {
+        this.state.syncHandlers.backup_team(this.props.team).then(() => {
+            console.log("Team backed up, setting backed up state for: ", this.props.team)
+            this.setState({
+                team_status: Status.BACKED_UP_AND_AVAILABLE,
+            });
+        }).catch((err) => {
+            console.error("Backup error: ", err);
+        });
+    }
+
+    disable_backup_button_check() {
+        switch (this.state.team_status) {
+            case Status.CURRENTLY_BEING_EDITED:
+            case Status.BACKED_UP_AND_AVAILABLE:
+                return true;
+            case Status.NOT_BACKED_UP:
+                return false;
+            case Status.BACKED_UP_AND_NOT_AVAILABLE:
+                // need to hide and move to "restore"
+                break;
+            default:
+                console.warn("Unexpected state:", this.state.team_status);
+                return true;
+        }
+    }
+
     render() {
         return (
             <li>
@@ -90,7 +119,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
                         </li>
                         <li>
                             <ButtonGroup>
-                                <Button onClick={() => this.state.syncHandlers.backup_team(this.props.team)}>Backup</Button>
+                                <Button onClick={() => this.backup_callback()} disabled={this.disable_backup_button_check()}>Backup</Button>
                             </ButtonGroup>
                         </li>
                     </UL>
