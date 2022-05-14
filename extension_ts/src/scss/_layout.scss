@@ -17,6 +17,7 @@ $dark-example-background-color: $dark-gray3;
 
 .extension-root {
   background-color: $content-background-color;
+  // padding: $example-spacing * 0.2;
 
   &.#{$ns}-dark {
     background-color: $dark-content-background-color;
@@ -46,6 +47,10 @@ $dark-example-background-color: $dark-gray3;
     margin: $example-spacing * 0.15;
     width: 100%;
   }
+}
+
+.bp4-tabs {
+  padding-bottom: $example-spacing * 0.3;
 }
 
 .bp4-tab-panel {
