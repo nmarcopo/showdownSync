@@ -35,6 +35,7 @@ Pokemon Showdown includes a teambuilder where users can create teams of Pokemon 
 - [ ] Dark Mode Toggle
 - [ ] Folder functionality
 - [ ] Backup button injected into Showdown's page
+- [ ] How should I handle duplicate names -- warning when there's more than one of same name?
 
 ## React Notes
 - Extension makes the assumption that ALL editing of the team is done in the Showdown team builder.
