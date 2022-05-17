@@ -6,8 +6,12 @@ class StorageState {
     @observable cloudTeams: { [key: string]: ShowdownTeamJson } = {};
 
     constructor() {
-        this.loadLocalTeams();
-        this.loadLocalTeams();
+        this.loadLocalTeams().then(() => {
+            console.log("Local teams loaded,", this.localTeams);
+        });
+        this.loadCloudTeams().then(() => {
+            console.log("Cloud teams loaded,", this.cloudTeams);
+        });
     }
 
     async loadLocalTeams() {
@@ -19,7 +23,7 @@ class StorageState {
             },
             world: 'MAIN',
         }).then((results) => {
-            console.log("teams response:", results);
+            console.log("local teams response:", results);
             // results is an array of InjectionResult objects
             let teams_array = results[0].result as ShowdownTeamJson[];
             // Parse through results and put in the the localTeams object
@@ -32,6 +36,14 @@ class StorageState {
     }
 
     async loadCloudTeams() {
+        chrome.storage.sync.get().then((results) => {
+            console.log("cloud teams response:", results);
+            for (let [key, team] of Object.entries(results)) {
+                this.cloudTeams[key] = JSON.parse(team);
+            }
+        }).catch((error) => {
+            console.error("Error getting teams:", error);
+        });
     }
 }
 

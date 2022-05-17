@@ -1,4 +1,5 @@
 import React from "react";
+import { observer } from "mobx-react";
 
 import { Button, ButtonGroup, Card, Tag, UL } from "@blueprintjs/core";
 import { SyncHandlers } from "../scripts/SyncHandlers";
@@ -52,7 +53,7 @@ export class Team extends React.Component<TeamProps, TeamState> {
     }
 
     async getIcons(team: ShowdownTeamJson) {
-        console.log("team", JSON.stringify(team));
+        console.log("team", team);
         // IconCache can be an exclamation point
         // Return iconcache if it's already defined in props
         if (this.props.team.iconCache.length > 1) {
