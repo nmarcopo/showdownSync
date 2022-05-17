@@ -1,14 +1,15 @@
-import React from "react";
-import { observer } from "mobx-react";
-
 import { Button, ButtonGroup, Card, Tag, UL } from "@blueprintjs/core";
+import React from "react";
+import { popupStore } from "../mobx/popupState";
 import { SyncHandlers } from "../scripts/SyncHandlers";
 import { TeamListType } from "./TeamList";
+
 
 // TODO: We can derive these now from the mobx store
 enum Status {
     NOT_BACKED_UP,
     BACKED_UP_AND_AVAILABLE,
+    BACKED_UP_AND_OUTDATED,
     BACKED_UP_AND_NOT_AVAILABLE,
     CURRENTLY_BEING_EDITED,
 }
@@ -50,6 +51,55 @@ export class Team extends React.Component<TeamProps, TeamState> {
                 iconCache: response
             });
         });
+
+        this.get_team_status();
+    }
+
+    get_team_status() {
+        // Determine the state of the team. May be inefficient to do this at every render
+        // Need to move this out of here
+        let teams_from_other_popup_store;
+        if (this.props.team_list_type === TeamListType.LOCAL) {
+            teams_from_other_popup_store = popupStore.cloudTeams;
+        } else if (this.props.team_list_type === TeamListType.CLOUD) {
+            teams_from_other_popup_store = popupStore.localTeams;
+        } else {
+            throw new Error(`Unexpected team list type: ${this.props.team_list_type}`);
+        }
+
+        if (this.state.team_status === Status.CURRENTLY_BEING_EDITED) {
+            console.warn("Team is being edited");
+        } else {
+            // Check if team exists in both local and cloud
+            if (getShowdownTeamJsonKey(this.props.team) in teams_from_other_popup_store) {
+                // if here, we know that the team name is at least in both local and cloud
+                // IconCache could be a problem here. Just compare the contents of the team
+                if (teams_from_other_popup_store[getShowdownTeamJsonKey(this.props.team)].team === this.props.team.team) {
+                    this.setState({
+                        team_status: Status.BACKED_UP_AND_AVAILABLE,
+                    });
+                } else {
+                    this.setState({
+                        team_status: Status.BACKED_UP_AND_OUTDATED,
+                    });
+                }
+            } else {
+                switch (this.props.team_list_type) {
+                    case TeamListType.LOCAL:
+                        this.setState({
+                            team_status: Status.NOT_BACKED_UP,
+                        });
+                        break;
+                    case TeamListType.CLOUD:
+                        this.setState({
+                            team_status: Status.BACKED_UP_AND_NOT_AVAILABLE,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Unexpected team list type: ${this.props.team_list_type}`);
+                }
+            }
+        }
     }
 
     async getIcons(team: ShowdownTeamJson) {
