@@ -22,12 +22,10 @@ export class TeamListContainer extends React.Component<TeamListContainerProps, T
         vertical: false,
     };
 
-
     tabs = function () {
         let tabNames = []
-        for (let [key, value] of Object.entries(TeamListType)) {
-            // TODO: need to dynamically create panels here
-            tabNames.push(<Tab key={value} id={value} title={value} panel={<TeamList team_list_type={key as TeamListType} /> } />)
+        for (let value of Object.values(TeamListType)) {
+            tabNames.push(<Tab key={value} id={value} title={value} panel={<TeamList team_list_type={value as TeamListType} />} />)
         }
         return tabNames
     }
@@ -40,7 +38,7 @@ export class TeamListContainer extends React.Component<TeamListContainerProps, T
                 onChange={this.handleNavbarTabChange}
                 selectedTabId={this.state.navbarTabId}
             >
-                
+
                 {this.tabs()}
 
             </Tabs>

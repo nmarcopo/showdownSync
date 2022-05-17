@@ -2,7 +2,9 @@ import React from "react";
 
 import { Button, ButtonGroup, Card, Tag, UL } from "@blueprintjs/core";
 import { SyncHandlers } from "../scripts/SyncHandlers";
+import { TeamListType } from "./TeamList";
 
+// TODO: We can derive these now from the mobx store
 enum Status {
     NOT_BACKED_UP,
     BACKED_UP_AND_AVAILABLE,
@@ -12,6 +14,7 @@ enum Status {
 
 export interface TeamProps {
     team: ShowdownTeamJson;
+    team_list_type: TeamListType; // Which team list the team should be assigned to
 }
 
 interface TeamState {
@@ -127,4 +130,8 @@ export class Team extends React.Component<TeamProps, TeamState> {
             </li>
         );
     }
+}
+
+export function getShowdownTeamJsonKey(team: ShowdownTeamJson) {
+    return team.format + team.name;
 }

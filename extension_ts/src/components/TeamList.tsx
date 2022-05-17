@@ -1,68 +1,46 @@
 import React from "react";
 
-import { Card, H4, H6, UL } from "@blueprintjs/core";
-import { Team, ShowdownTeamJson } from "./Team";
+import { H4, UL } from "@blueprintjs/core";
+import { Team } from "./Team";
+import { popupStore } from "../mobx/popupState";
 
 export enum TeamListType {
-    AVAILABLE_TEAMS = "Available Teams",
-    RESTORE_TEAMS = "Restore Teams"
+    LOCAL = "Available Teams",
+    CLOUD = "Restore Teams"
 };
 
 export interface TeamListProps {
     team_list_type: TeamListType;
 }
 
-interface TeamListState {
-    teams_data: ShowdownTeamJson[] | undefined;
-    // team_status: Status;
-}
-
-export class TeamList extends React.Component<TeamListProps, TeamListState> {
-    public state: TeamListState = {
-        teams_data: undefined,
-    };
-
-
-    componentDidMount() {
-        this.getTeams().then((response) => {
-            console.log("response", response);
-            this.setState({
-                teams_data: response
-            });
-            console.log("state", this.state.teams_data);
-        })
-    }
-
-    async getTeams() {
-        const [{ result }] = await chrome.scripting.executeScript({
-            func: () => (window.Storage as any).teams,
-            target: {
-                tabId:
-                    (await chrome.tabs.query({ active: true, currentWindow: true }))[0].id!
-            },
-            world: 'MAIN',
-        });
-        return result;
-    }
-
+export class TeamList extends React.Component<TeamListProps> {
     render() {
         let teamsDisplay;
-        if (this.state.teams_data !== undefined) {
-            console.log("state is defined!");
-            teamsDisplay = this.state.teams_data.map(team =>
-                <Team team={team} />
-            );
-            console.log("teamsDisplay", teamsDisplay)
+        let teams_from_popup_store;
+        
+        if (this.props.team_list_type as TeamListType === TeamListType.LOCAL) {
+            teams_from_popup_store = popupStore.localTeams;
+        } else if (this.props.team_list_type as TeamListType === TeamListType.CLOUD) {
+            teams_from_popup_store = popupStore.cloudTeams;
         } else {
-            console.log("State is undefined");
-            teamsDisplay = <H4>There's no teams data!</H4>
+            throw new Error(`Unknown team list type: ${this.props.team_list_type.toString()}`);
         }
 
-        return (
-            <div className="docs-example">
-                <UL className="bp4-list-unstyled">
-                    {teamsDisplay}
-                </UL>
+        if (Object.values(teams_from_popup_store).length === 0) {
+            console.log("State is undefined");
+            teamsDisplay = <H4>No teams data!</H4>
+        } else {
+            teamsDisplay = Object.values(teams_from_popup_store).map(team =>
+                <Team team={team} team_list_type={TeamListType.LOCAL} />
+            );
+        }
+        console.log("teamsDisplay", teamsDisplay)
+
+    return(
+            <div className = "docs-example" >
+            <UL className="bp4-list-unstyled">
+                {teamsDisplay}
+            </UL>
             </div>
         );
     }
